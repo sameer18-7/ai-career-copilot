@@ -1,0 +1,35 @@
+smart job portal
+ai resume analyser
+interview coach
+personalized learning platfrom
+ 
+Project Overview
+The AI Career Copilot is an end-to-end, personalized career acceleration platform designed to guide students from their current skill sets to successfully landing a job. Rather than functioning as a collection of isolated AI demos, the platform integrates multiple AI/ML components into a single, cohesive user journey:
+Upload Resume -Analyze Skill Gaps -Personalized Learning- Mock Practice -Job Placement
+By combining Natural Language Processing (NLP), Predictive Modeling, Recommendation Systems, and Large Language Models (LLMs), the platform solves a massive student pain point: knowing exactly what the market demands and bridging that gap efficiently.
+Complete Feature Roadmap
+Phase 1: Core Data Pipeline & Analysis (Semester Project Focus)
+Resume Parsing (NLP): Automatically ingests PDF resumes and uses NLP/Named Entity Recognition (NER) to extract structured data (Skills, Education, Experience, Projects, Certifications).
+Skill Extraction: Maps and normalizes skills using sentence embeddings to understand exactly what a student knows versus what a job description requires.
+ATS Score Prediction: Evaluates the resume against a specific target role using a machine learning model (Random Forest or XGBoost) based on formatting, readability, missing sections, and keyword density.
+Skill Gap Analysis: Performs a semantic comparison between the student’s profile and real-world market job descriptions to output a precise list of missing skills (e.g., "You know Python, but you need Docker and AWS").
+Phase 2: Recommendation & Personalization
+Job Recommendation Engine: Utilizes advanced matching algorithms (progressing from TF-IDF and Sentence Transformers to a Hybrid Recommender system) to match users with roles like Backend, Data, or ML Engineer based on location, skills, and interests.
+Personalized Learning Engine: Uses content-based recommendations and embeddings to map out a structured learning path for missing skills (e.g., breaking down "Docker" into step-by-step concepts).
+Adaptive Quiz Generator: Dynamically creates technical quizzes that scale in difficulty based on the user's weak performance areas or newly identified skill gaps.
+Phase 3: Interactive Coaching & Analytics
+AI Tutor: An LLM-powered interactive assistant that moves beyond static links to provide explanations, architecture diagrams, flashcards, and instant Q&A for complex topics.
+AI Interview Coach: A comprehensive mock interview module covering behavioral and technical rounds (with company-specific tracks for tech giants like Google or Amazon) utilizing Speech-to-Text and LLM-driven feedback.
+Comprehensive Career Dashboard: A centralized control center tracking real-time metrics including Learning Progress, Interview Scores, ATS Scores, Application Status, and open Skill Gaps.
+Phase 4: Advanced Integrations
+External Profile Analysis: Direct integration with GitHub (for code quality/project scoring) and LinkedIn (for profile importing).
+Automated Market Scrapers: Real-time job scraping to keep market skill demands dynamically updated.
+Salary Prediction Engine: A regression model that forecasts expected compensation (e.g., 8–12 LPA) based on the user's localized experience, skill set, and degree.
+Cross-Platform Accessibility: Expansion into mobile applications and browser extensions for seamless job tracking.
+Target Technical Architecture
+The platform is designed using a robust, production-grade software engineering architecture, making it an excellent talking point for technical interviews:
+Frontend: React (for a highly interactive user dashboard and learning interface).
+Backend: FastAPI (a highly modular, microservices-oriented backend handling individual services for Resumes, Jobs, Learning, Interviews, and Recommendations).
+Data Layer: PostgreSQL (relational user data), Redis (caching), Vector Databases (for fast semantic matching of embeddings), and AWS S3 (secure resume storage).
+AI/ML Tools: spaCy, Hugging Face, Sentence Transformers, XGBoost, and LLM APIs.
+ 
