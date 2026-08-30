@@ -1,0 +1,77 @@
+export const mockCandidates = [
+    {
+        id: 'CND-7842',
+        matchScore: 96,
+        justification: 'Strong React/Next.js experience, 3 open-source contributions, internship at a FAANG company. Excellent DSA and system design skills.',
+        skills: ['React', 'Next.js', 'TypeScript', 'Node.js', 'System Design'],
+        resumeFile: 'resume_7842.pdf',
+        shortlisted: false,
+    },
+    {
+        id: 'CND-3156',
+        matchScore: 92,
+        justification: 'Full-stack expertise with MERN stack. Published research paper on ML. Hackathon winner (SIH 2025).',
+        skills: ['MongoDB', 'Express', 'React', 'Node.js', 'Python'],
+        resumeFile: 'resume_3156.pdf',
+        shortlisted: false,
+    },
+    {
+        id: 'CND-9023',
+        matchScore: 88,
+        justification: 'Solid backend skills with Python/Django. AWS certified. Strong problem-solving demonstrated through 500+ LeetCode solutions.',
+        skills: ['Python', 'Django', 'AWS', 'PostgreSQL', 'Docker'],
+        resumeFile: 'resume_9023.pdf',
+        shortlisted: false,
+    },
+    {
+        id: 'CND-4517',
+        matchScore: 85,
+        justification: 'Great frontend skills with Vue and React. UI/UX design experience. Portfolio includes 12 production projects.',
+        skills: ['React', 'Vue.js', 'Figma', 'Tailwind CSS', 'JavaScript'],
+        resumeFile: 'resume_4517.pdf',
+        shortlisted: false,
+    },
+    {
+        id: 'CND-6289',
+        matchScore: 81,
+        justification: 'Data engineering background with Spark and Kafka. ML pipeline experience. Led team of 5 in capstone project.',
+        skills: ['Python', 'Apache Spark', 'Kafka', 'SQL', 'Airflow'],
+        resumeFile: 'resume_6289.pdf',
+        shortlisted: false,
+    },
+    {
+        id: 'CND-1734',
+        matchScore: 78,
+        justification: 'Mobile dev specialist (React Native + Flutter). Published 3 apps on Play Store with 10K+ downloads.',
+        skills: ['React Native', 'Flutter', 'Dart', 'Firebase', 'REST APIs'],
+        resumeFile: 'resume_1734.pdf',
+        shortlisted: false,
+    },
+    {
+        id: 'CND-8401',
+        matchScore: 74,
+        justification: 'DevOps focused with CI/CD expertise. Kubernetes and Terraform experience. Contributed to infrastructure automation.',
+        skills: ['Docker', 'Kubernetes', 'Terraform', 'Jenkins', 'Linux'],
+        resumeFile: 'resume_8401.pdf',
+        shortlisted: false,
+    },
+    {
+        id: 'CND-2098',
+        matchScore: 69,
+        justification: 'Decent Java/Spring Boot skills. Good academics (9.2 CGPA). Needs more project experience but strong fundamentals.',
+        skills: ['Java', 'Spring Boot', 'MySQL', 'REST APIs', 'Git'],
+        resumeFile: 'resume_2098.pdf',
+        shortlisted: false,
+    },
+];
+
+export const mockJobPostings = [
+    {
+        id: 'JOB-001',
+        title: 'Senior Frontend Developer',
+        description: 'We are looking for an experienced frontend developer to lead our web applications team.',
+        competencies: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Testing'],
+        createdAt: '2026-02-28',
+        status: 'active',
+    },
+];
