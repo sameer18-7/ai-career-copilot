@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-export default function CompanyLogin() {
+export default function IndividualsLogin() {
     const [isSignUp, setIsSignUp] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -22,14 +22,14 @@ export default function CompanyLogin() {
                 const res = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, role: 'company' }),
+                    body: JSON.stringify({ name, email, password, role: 'college' }),
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Registration failed');
             }
             const result = await signIn('credentials', { email, password, redirect: false });
             if (result?.error) throw new Error('Invalid email or password');
-            router.push('/company');
+            router.push('/college');
         } catch (err) {
             setError(err.message);
         } finally {
@@ -52,9 +52,9 @@ export default function CompanyLogin() {
                 <div className="rounded-[20px] p-8 border border-white/50 shadow-lg" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
                     <div className="flex items-center gap-2 mb-6">
                         <div className="bg-indigo-100 p-2 rounded-lg">
-                            <span className="material-symbols-outlined text-indigo-600 text-xl">business</span>
+                            <span className="material-symbols-outlined text-indigo-600 text-xl">badge</span>
                         </div>
-                        <span className="text-[15px] font-bold text-gray-900">Business Portal</span>
+                        <span className="text-[15px] font-bold text-gray-900">Individuals Portal</span>
                     </div>
 
                     {error && (
@@ -66,10 +66,10 @@ export default function CompanyLogin() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {isSignUp && (
                             <div>
-                                <label className="block text-[14px] font-semibold text-gray-700 mb-1.5">Company Name</label>
+                                <label className="block text-[14px] font-semibold text-gray-700 mb-1.5">Full Name</label>
                                 <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">apartment</span>
-                                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 placeholder-gray-400" placeholder="Company name" />
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">person</span>
+                                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 placeholder-gray-400" placeholder="Your name" />
                                 </div>
                             </div>
                         )}
@@ -77,7 +77,7 @@ export default function CompanyLogin() {
                             <label className="block text-[14px] font-semibold text-gray-700 mb-1.5">Email Address</label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">mail</span>
-                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 placeholder-gray-400" placeholder="hr@company.com" />
+                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 placeholder-gray-400" placeholder="user@example.com" />
                             </div>
                         </div>
                         <div>
@@ -105,8 +105,8 @@ export default function CompanyLogin() {
                 </div>
 
                 <div className="mt-6 flex justify-center text-[13px]">
-                    <a href="/auth/login/individuals" className="text-gray-600 hover:text-gray-900 font-medium transition-colors flex items-center gap-1.5">
-                        <span className="material-symbols-outlined text-[18px]">badge</span>Switch to Individuals
+                    <a href="/auth/login/company" className="text-gray-600 hover:text-gray-900 font-medium transition-colors flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[18px]">business</span>Switch to Business
                     </a>
                 </div>
             </div>

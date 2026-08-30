@@ -21,8 +21,8 @@ export default function LandingPage() {
                         <span className="ml-2 px-2.5 py-0.5 bg-white/10 text-white/80 text-[11px] font-bold rounded-full uppercase tracking-wider border border-white/20">AI Powered</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <a href="/auth/login/college" className="text-[14px] font-medium text-white/70 hover:text-white px-4 py-2 rounded-lg transition-colors">Sign In</a>
-                        <a href="/auth/login/college" className="bg-blue-600 hover:bg-blue-700 text-white text-[14px] font-semibold px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-blue-900/20">Get Started</a>
+                        <a href="/auth/login/individuals" className="text-[14px] font-medium text-white/70 hover:text-white px-4 py-2 rounded-lg transition-colors">Sign In</a>
+                        <a href="/auth/login/individuals" className="bg-blue-600 hover:bg-blue-700 text-white text-[14px] font-semibold px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-blue-900/20">Get Started</a>
                     </div>
                 </div>
             </nav>
@@ -50,7 +50,7 @@ export default function LandingPage() {
                         </p>
 
                         <div className="flex items-center justify-center gap-4">
-                            <a href="/auth/login/college" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-[16px] font-semibold transition-all shadow-lg shadow-blue-900/20 hover:-translate-y-0.5">
+                            <a href="/auth/login/individuals" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-[16px] font-semibold transition-all shadow-lg shadow-blue-900/20 hover:-translate-y-0.5">
                                 <span className="material-symbols-outlined text-[20px]">rocket_launch</span>
                                 Start Your Journey
                             </a>
@@ -117,7 +117,7 @@ export default function LandingPage() {
 
                 <div className="grid grid-cols-3 gap-8">
                     {/* Student */}
-                    <a href="/auth/login/college" className="group block rounded-2xl border border-white/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
+                    <a href="/auth/login/individuals" className="group block rounded-2xl border border-white/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
                         <div className="h-[6px] bg-gradient-to-r from-blue-500 to-blue-600"></div>
                         <div className="p-8">
                             <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -161,7 +161,7 @@ export default function LandingPage() {
                     </a>
 
                     {/* Working Professionals */}
-                    <a href="/auth/login/college" className="group block rounded-2xl border border-white/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
+                    <a href="/auth/login/individuals" className="group block rounded-2xl border border-white/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
                         <div className="h-[6px] bg-gradient-to-r from-emerald-500 to-emerald-600"></div>
                         <div className="p-8">
                             <div className="bg-emerald-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -222,7 +222,7 @@ export default function LandingPage() {
                         <h2 className="text-[36px] font-bold text-white mb-4">Ready to Transform Your Placement Process?</h2>
                         <p className="text-[16px] text-white/60 max-w-[500px] mx-auto mb-8">Join hundreds of institutions using linker.intel to make hiring smarter, faster, and fairer.</p>
                         <div className="flex items-center justify-center gap-4">
-                            <a href="/auth/login/college" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-[16px] font-semibold transition-all shadow-lg hover:-translate-y-0.5">
+                            <a href="/auth/login/individuals" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-[16px] font-semibold transition-all shadow-lg hover:-translate-y-0.5">
                                 <span className="material-symbols-outlined text-[20px]">person_add</span>Sign Up Free
                             </a>
                             <a href="/auth/login/company" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl text-[16px] font-semibold border border-white/20 transition-all hover:-translate-y-0.5">
@@ -244,9 +244,9 @@ export default function LandingPage() {
                             <span className="text-[16px] font-bold text-white">linker.intel</span>
                         </div>
                         <div className="flex items-center gap-6">
-                            <a href="/auth/login/college" className="text-[13px] text-white/50 hover:text-white transition-colors">Students</a>
+                            <a href="/auth/login/individuals" className="text-[13px] text-white/50 hover:text-white transition-colors">Students</a>
                             <a href="/auth/login/company" className="text-[13px] text-white/50 hover:text-white transition-colors">Business</a>
-                            <a href="/auth/login/college" className="text-[13px] text-white/50 hover:text-white transition-colors">Working Professionals</a>
+                            <a href="/auth/login/individuals" className="text-[13px] text-white/50 hover:text-white transition-colors">Working Professionals</a>
                         </div>
                         <p className="text-[13px] text-white/30">&copy; 2026 linker.intel. AI-powered placement platform.</p>
                     </div>
