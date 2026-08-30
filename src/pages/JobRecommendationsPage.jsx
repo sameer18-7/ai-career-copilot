@@ -1,343 +1,513 @@
-import { useState } from 'react';
+import { useState, useId } from "react";
+import { Link } from "react-router-dom";
 import {
-  Search, MapPin, Briefcase, DollarSign, Bookmark, ExternalLink,
-  Filter, Grid3X3, List, ChevronDown, Clock, X, SlidersHorizontal
-} from 'lucide-react';
-import AppShell from '../components/AppShell';
+  Search,
+  MapPin,
+  Bookmark,
+  ExternalLink,
+  Sparkles,
+  Briefcase,
+  DollarSign,
+  GraduationCap,
+  Check,
+  CheckCircle2,
+  Clock,
+  ArrowRight,
+  Filter
+} from "lucide-react";
 
-const allJobs = [
+const JOBS = [
   {
-    id: 1, role: 'Backend Engineer', company: 'Google', location: 'Bangalore, India',
-    match: 92, salary: '₹12–18 LPA', type: 'Hybrid', posted: '2 days ago',
-    color: '#4285F4', logo: 'G',
-    matchedSkills: ['Python', 'SQL', 'REST APIs', 'Git'],
-    missingSkills: ['Docker', 'Kubernetes'],
+    id: 1,
+    title: "Frontend Engineer",
+    company: "NovaTech Systems",
+    location: "Bengaluru, India",
+    salary: "₹8,00,000 - ₹12,00,000 a year",
+    salaryShort: "₹8–12 LPA",
+    match: 94,
+    type: "Full-time",
+    level: "Mid-level",
+    workplace: "Hybrid",
+    posted: "2 days ago",
+    reason: "Matches your React + TypeScript skills",
+    fitReasons: [
+      "Strong overlap with your resume's React, Redux, and Tailwind experience",
+      "Your recent project 'AI Career Copilot' aligns with their product stack",
+      "Salary range fits your target compensation band",
+    ],
+    matchedSkills: ["React", "TypeScript", "Tailwind CSS", "REST APIs"],
+    missingSkills: ["GraphQL"],
   },
   {
-    id: 2, role: 'Data Analyst', company: 'Amazon', location: 'Hyderabad, India',
-    match: 87, salary: '₹8–12 LPA', type: 'Onsite', posted: '1 day ago',
-    color: '#FF9900', logo: 'A',
-    matchedSkills: ['Python', 'SQL', 'Git'],
-    missingSkills: ['Tableau', 'AWS'],
+    id: 2,
+    title: "Backend Developer (Node.js)",
+    company: "Vertex Cloud Labs",
+    location: "Remote, India",
+    salary: "₹9,50,000 - ₹14,00,000 a year",
+    salaryShort: "₹9.5–14 LPA",
+    match: 88,
+    type: "Full-time",
+    level: "Mid-level",
+    workplace: "Remote",
+    posted: "1 day ago",
+    reason: "Matches your Node.js + FastAPI experience",
+    fitReasons: [
+      "You've shipped microservices in Node.js and Python",
+      "Remote-first role matches your stated preference",
+      "Company uses AWS, which matches your recent cloud coursework",
+    ],
+    matchedSkills: ["Node.js", "Express", "SQL", "Git"],
+    missingSkills: ["Docker", "AWS"],
   },
   {
-    id: 3, role: 'ML Engineer', company: 'Microsoft', location: 'Noida, India',
-    match: 84, salary: '₹15–22 LPA', type: 'Remote', posted: '3 days ago',
-    color: '#00A4EF', logo: 'M',
-    matchedSkills: ['Python', 'SQL', 'Git'],
-    missingSkills: ['TensorFlow', 'Docker', 'AWS'],
+    id: 3,
+    title: "AI/ML Intern",
+    company: "Sprintify Labs",
+    location: "Hyderabad, India",
+    salary: "₹25,000 - ₹35,000 a month",
+    salaryShort: "₹3-4.2 LPA",
+    match: 81,
+    type: "Internship",
+    level: "Entry-level",
+    workplace: "Onsite",
+    posted: "3 days ago",
+    reason: "Matches your ML coursework and project work",
+    fitReasons: [
+      "Aligned with your algorithms and data science background",
+      "Internship duration fits a semester break window",
+      "Team works on recommendation systems, close to your AI/ML layer",
+    ],
+    matchedSkills: ["Python", "PyTorch", "SQL"],
+    missingSkills: ["MLOps"],
   },
   {
-    id: 4, role: 'Full Stack Developer', company: 'Flipkart', location: 'Bangalore, India',
-    match: 81, salary: '₹10–15 LPA', type: 'Hybrid', posted: '5 days ago',
-    color: '#2874F0', logo: 'F',
-    matchedSkills: ['React', 'Node.js', 'JavaScript', 'MongoDB'],
-    missingSkills: ['Docker'],
+    id: 4,
+    title: "Full Stack Developer",
+    company: "Flipkart",
+    location: "Bengaluru, India",
+    salary: "₹10,00,000 - ₹16,00,000 a year",
+    salaryShort: "₹10–16 LPA",
+    match: 79,
+    type: "Full-time",
+    level: "Mid-level",
+    workplace: "Hybrid",
+    posted: "4 days ago",
+    reason: "Matches your MERN stack expertise",
+    fitReasons: [
+      "Extensive React and Node.js project experience on your profile",
+      "E-commerce workflow knowledge matches company focus area",
+      "Demonstrated competency in API performance optimization",
+    ],
+    matchedSkills: ["React", "Node.js", "MongoDB", "JavaScript"],
+    missingSkills: ["Kubernetes"],
   },
   {
-    id: 5, role: 'DevOps Engineer', company: 'Razorpay', location: 'Remote',
-    match: 78, salary: '₹12–16 LPA', type: 'Remote', posted: '1 week ago',
-    color: '#3395FF', logo: 'R',
-    matchedSkills: ['Python', 'Git'],
-    missingSkills: ['Docker', 'Kubernetes', 'AWS', 'Terraform'],
-  },
-  {
-    id: 6, role: 'Frontend Developer', company: 'Swiggy', location: 'Bangalore, India',
-    match: 75, salary: '₹8–14 LPA', type: 'Onsite', posted: '4 days ago',
-    color: '#FC8019', logo: 'S',
-    matchedSkills: ['React', 'JavaScript', 'HTML/CSS', 'TypeScript'],
-    missingSkills: ['Next.js'],
+    id: 5,
+    title: "DevOps Engineer",
+    company: "Razorpay",
+    location: "Remote, India",
+    salary: "₹12,00,000 - ₹18,00,000 a year",
+    salaryShort: "₹12–18 LPA",
+    match: 75,
+    type: "Full-time",
+    level: "Mid-level",
+    workplace: "Remote",
+    posted: "5 days ago",
+    reason: "Matches your CI/CD and Linux fundamentals",
+    fitReasons: [
+      "Solid command over Git workflows and script automation",
+      "Demonstrated interest in Cloud Native architecture",
+      "Competitive salary package matching market rates",
+    ],
+    matchedSkills: ["Linux", "Git", "Python"],
+    missingSkills: ["Docker", "Terraform", "AWS"],
   },
 ];
 
-const roleFilters = ['All', 'Backend', 'Frontend', 'Data', 'ML', 'DevOps', 'Full Stack'];
-const locationFilters = ['All Locations', 'Bangalore', 'Hyderabad', 'Noida', 'Remote'];
-const typeFilters = ['All', 'Remote', 'Hybrid', 'Onsite'];
+const FILTERS = ["Date posted", "Match score", "Job type", "Remote"];
 
 export default function JobRecommendationsPage() {
-  const [viewMode, setViewMode] = useState('list');
-  const [sortBy, setSortBy] = useState('match');
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedRole, setSelectedRole] = useState('All');
-  const [selectedLocation, setSelectedLocation] = useState('All Locations');
-  const [selectedType, setSelectedType] = useState('All');
-  const [salaryRange, setSalaryRange] = useState([0, 30]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedId, setSelectedId] = useState(JOBS[0].id);
+  const [activeFilters, setActiveFilters] = useState([]);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
+  const [savedJobs, setSavedJobs] = useState([1]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [showAppliedToast, setShowAppliedToast] = useState(false);
 
-  const filteredJobs = allJobs
-    .filter(job => {
-      if (selectedRole !== 'All' && !job.role.toLowerCase().includes(selectedRole.toLowerCase())) return false;
-      if (selectedLocation !== 'All Locations' && !job.location.includes(selectedLocation)) return false;
-      if (selectedType !== 'All' && job.type !== selectedType) return false;
-      if (searchQuery && !job.role.toLowerCase().includes(searchQuery.toLowerCase()) && !job.company.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      if (sortBy === 'match') return b.match - a.match;
-      if (sortBy === 'date') return 0; // keeping original order for demo
-      return 0;
-    });
+  const titleSuggestionsId = useId();
+
+  const toggleFilter = (f) =>
+    setActiveFilters((prev) =>
+      prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]
+    );
+
+  const toggleBookmark = (e, id) => {
+    e.stopPropagation();
+    setSavedJobs((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleApply = (id) => {
+    if (!appliedJobs.includes(id)) {
+      setAppliedJobs((prev) => [...prev, id]);
+      setShowAppliedToast(true);
+      setTimeout(() => setShowAppliedToast(false), 3000);
+    }
+  };
+
+  // Filter jobs based on search & filter pills
+  const filteredJobs = JOBS.filter((job) => {
+    const matchesTitle =
+      !searchTitle ||
+      job.title.toLowerCase().includes(searchTitle.toLowerCase()) ||
+      job.company.toLowerCase().includes(searchTitle.toLowerCase()) ||
+      job.matchedSkills.some((s) => s.toLowerCase().includes(searchTitle.toLowerCase()));
+
+    const matchesLoc =
+      !searchLocation ||
+      job.location.toLowerCase().includes(searchLocation.toLowerCase());
+
+    if (!matchesTitle || !matchesLoc) return false;
+
+    if (activeFilters.includes("Remote") && job.workplace !== "Remote") return false;
+    if (activeFilters.includes("Job type") && job.type !== "Full-time") return false;
+    if (activeFilters.includes("Match score") && job.match < 85) return false;
+
+    return true;
+  });
+
+  const selected = JOBS.find((j) => j.id === selectedId) || filteredJobs[0] || JOBS[0];
+  const isSelectedSaved = savedJobs.includes(selected.id);
+  const isSelectedApplied = appliedJobs.includes(selected.id);
 
   return (
-    <AppShell>
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-        <div>
-          <h1 className="text-2xl font-extrabold text-navy mb-1">Your Job Matches</h1>
-          <p className="text-sm text-text-secondary">AI-curated job recommendations based on your skills and preferences.</p>
-        </div>
-        <div className="relative w-full sm:w-64">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search roles or companies..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-gray-200 text-sm text-navy placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-royal-blue/20 focus:border-royal-blue transition-all"
-          />
-        </div>
-      </div>
-
-      <div className="flex gap-6">
-        {/* Filter Sidebar — Desktop */}
-        <aside className={`hidden lg:block w-[260px] flex-shrink-0`}>
-          <div className="card p-5 sticky top-24">
-            <h3 className="text-sm font-bold text-navy mb-4 flex items-center gap-2">
-              <SlidersHorizontal size={16} /> Filters
-            </h3>
-
-            {/* Role Type */}
-            <div className="mb-5">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2 block">Role Type</label>
-              <div className="flex flex-wrap gap-1.5">
-                {roleFilters.map(role => (
-                  <button
-                    key={role}
-                    onClick={() => setSelectedRole(role)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                      selectedRole === role ? 'bg-royal-blue text-white' : 'bg-bg-light text-text-secondary hover:bg-gray-200'
-                    }`}
-                    style={{ border: 'none', cursor: 'pointer' }}
-                  >
-                    {role}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Location */}
-            <div className="mb-5">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2 block">Location</label>
-              <div className="relative">
-                <select
-                  value={selectedLocation}
-                  onChange={e => setSelectedLocation(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl bg-bg-light border-none text-sm text-navy font-medium appearance-none focus:outline-none cursor-pointer"
-                >
-                  {locationFilters.map(loc => <option key={loc}>{loc}</option>)}
-                </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Work Type */}
-            <div className="mb-5">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2 block">Work Type</label>
-              <div className="flex flex-wrap gap-1.5">
-                {typeFilters.map(type => (
-                  <button
-                    key={type}
-                    onClick={() => setSelectedType(type)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                      selectedType === type ? 'bg-royal-blue text-white' : 'bg-bg-light text-text-secondary hover:bg-gray-200'
-                    }`}
-                    style={{ border: 'none', cursor: 'pointer' }}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Salary Range */}
-            <div className="mb-5">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2 block">Salary Range (LPA)</label>
-              <input
-                type="range"
-                min={0}
-                max={30}
-                value={salaryRange[1]}
-                onChange={e => setSalaryRange([0, parseInt(e.target.value)])}
-                className="w-full accent-royal-blue"
-              />
-              <div className="flex justify-between text-xs text-text-secondary mt-1">
-                <span>₹0 LPA</span>
-                <span>₹{salaryRange[1]} LPA</span>
-              </div>
-            </div>
-
-            <button className="btn btn-primary w-full btn-sm">Apply Filters</button>
-          </div>
-        </aside>
-
-        {/* Mobile Filter Button */}
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="lg:hidden fixed bottom-6 right-6 z-30 btn btn-primary shadow-lg"
-          style={{ borderRadius: '50%', width: '56px', height: '56px', padding: 0 }}
+    <div className="min-h-screen bg-[#F7F8FC] text-[#12142B] font-sans">
+      {/* Toast Notification */}
+      {showAppliedToast && (
+        <div
+          role="status"
+          className="fixed bottom-6 right-6 z-50 bg-[#12142B] text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 animate-fade-in-up border border-white/10"
         >
-          <Filter size={22} />
-        </button>
-
-        {/* Mobile Filter Drawer */}
-        {showFilters && (
-          <>
-            <div className="fixed inset-0 bg-black/30 z-40 lg:hidden" onClick={() => setShowFilters(false)} />
-            <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 p-6 max-h-[70vh] overflow-y-auto lg:hidden animate-fade-in-up">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-bold text-navy">Filters</h3>
-                <button onClick={() => setShowFilters(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                  <X size={20} className="text-text-secondary" />
-                </button>
-              </div>
-              {/* Same filter content as desktop */}
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-semibold text-text-secondary mb-2 block">Role Type</label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {roleFilters.map(role => (
-                      <button key={role} onClick={() => setSelectedRole(role)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium ${selectedRole === role ? 'bg-royal-blue text-white' : 'bg-bg-light text-text-secondary'}`}
-                        style={{ border: 'none', cursor: 'pointer' }}>{role}</button>
-                    ))}
-                  </div>
-                </div>
-                <button className="btn btn-primary w-full" onClick={() => setShowFilters(false)}>Apply Filters</button>
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Main Content */}
-        <div className="flex-1 min-w-0">
-          {/* Sort Bar */}
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-text-secondary">
-              <span className="font-semibold text-navy">{filteredJobs.length}</span> jobs found
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-text-secondary hidden sm:block">Sort by:</span>
-                <div className="relative">
-                  <select
-                    value={sortBy}
-                    onChange={e => setSortBy(e.target.value)}
-                    className="pl-3 pr-8 py-1.5 rounded-lg bg-white border border-gray-200 text-xs text-navy font-medium appearance-none focus:outline-none cursor-pointer"
-                  >
-                    <option value="match">Match %</option>
-                    <option value="date">Date Posted</option>
-                    <option value="salary">Salary</option>
-                  </select>
-                  <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-                </div>
-              </div>
-              <div className="flex gap-1 bg-bg-light rounded-lg p-0.5">
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
-                  style={{ border: 'none', cursor: 'pointer' }}
-                >
-                  <List size={16} className={viewMode === 'list' ? 'text-navy' : 'text-text-muted'} />
-                </button>
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm' : ''}`}
-                  style={{ border: 'none', cursor: 'pointer' }}
-                >
-                  <Grid3X3 size={16} className={viewMode === 'grid' ? 'text-navy' : 'text-text-muted'} />
-                </button>
-              </div>
-            </div>
+          <div className="w-7 h-7 rounded-full bg-[#22D3C9]/20 flex items-center justify-center">
+            <CheckCircle2 size={18} className="text-[#22D3C9]" />
           </div>
-
-          {/* Job Cards */}
-          <div className={viewMode === 'grid' ? 'grid sm:grid-cols-2 gap-4' : 'space-y-4'}>
-            {filteredJobs.map(job => (
-              <div key={job.id} className="card p-5 hover:shadow-float transition-all cursor-pointer">
-                <div className="flex items-start gap-4">
-                  {/* Company Logo */}
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
-                    style={{ background: job.color }}
-                  >
-                    {job.logo}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="text-base font-bold text-navy">{job.role}</h3>
-                        <p className="text-sm text-text-secondary">{job.company}</p>
-                      </div>
-                      <span className={`px-3 py-1 rounded-full text-sm font-bold flex-shrink-0 ${
-                        job.match >= 85 ? 'bg-green-100 text-green-700' :
-                        job.match >= 75 ? 'bg-yellow-100 text-yellow-700' :
-                        'bg-orange-100 text-accent-orange'
-                      }`}>
-                        {job.match}% Match
-                      </span>
-                    </div>
-
-                    {/* Details */}
-                    <div className="flex flex-wrap items-center gap-3 mb-3 text-xs text-text-secondary">
-                      <span className="flex items-center gap-1"><MapPin size={12} /> {job.location}</span>
-                      <span className="flex items-center gap-1"><DollarSign size={12} /> {job.salary}</span>
-                      <span className="flex items-center gap-1"><Briefcase size={12} /> {job.type}</span>
-                      <span className="flex items-center gap-1"><Clock size={12} /> {job.posted}</span>
-                    </div>
-
-                    {/* Skills */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      {job.matchedSkills.map((skill, i) => (
-                        <span key={i} className="px-2 py-0.5 rounded-md bg-green-50 text-green-700 text-[11px] font-medium">
-                          {skill}
-                        </span>
-                      ))}
-                      {job.missingSkills.map((skill, i) => (
-                        <span key={i} className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-400 text-[11px] font-medium">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-2">
-                      <button className="btn btn-sm btn-primary" style={{ padding: '6px 16px', fontSize: '12px' }}>
-                        View Details <ExternalLink size={12} />
-                      </button>
-                      <button
-                        className="p-2 rounded-lg hover:bg-bg-light transition-colors text-text-muted hover:text-royal-blue"
-                        style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
-                        aria-label="Save job"
-                      >
-                        <Bookmark size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div>
+            <p className="text-sm font-bold">Application Sent with Copilot!</p>
+            <p className="text-xs text-[#9298B5]">Your tailored resume & cover letter were submitted.</p>
           </div>
+        </div>
+      )}
 
-          {/* Load More */}
-          <div className="text-center mt-8">
-            <button className="btn btn-outline">
-              Load More Jobs
+      {/* Sticky top navbar */}
+      <header className="sticky top-0 z-30 bg-white border-b border-[#E7E9F5]">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+          <Link to="/" className="font-extrabold text-xl tracking-tight text-[#12142B] no-underline flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-[#2A4BFF] flex items-center justify-center text-white font-bold text-sm">
+              AI
+            </div>
+            <span>AI Career <span className="text-[#2A4BFF]">Copilot</span></span>
+          </Link>
+          <nav className="hidden md:flex gap-8 text-sm font-medium text-[#5B5F79]">
+            <Link to="/dashboard" className="hover:text-[#12142B] no-underline">Dashboard</Link>
+            <Link to="/jobs" className="text-[#2A4BFF] font-bold no-underline">Job Matches</Link>
+            <Link to="/resume" className="hover:text-[#12142B] no-underline">Resume</Link>
+            <Link to="/interview" className="hover:text-[#12142B] no-underline">Interview Prep</Link>
+            <Link to="/skills" className="hover:text-[#12142B] no-underline">Skill Path</Link>
+          </nav>
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="text-sm font-semibold text-[#2A4BFF] hover:text-[#1E39CC] no-underline">
+              Sign in
+            </Link>
+            <Link to="/signup" className="bg-[#2A4BFF] hover:bg-[#1E39CC] text-white font-bold text-sm px-5 py-2.5 rounded-full transition-colors no-underline shadow-sm hover:shadow-md">
+              For Recruiters
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Search band */}
+      <section className="bg-[#EDEFFD] py-8 border-b border-[#E7E9F5]/60">
+        <div className="max-w-7xl mx-auto px-6">
+          <div
+            role="search"
+            className="bg-white rounded-2xl shadow-lg shadow-[#2A4BFF]/5 p-3 flex flex-col md:flex-row gap-3 items-stretch"
+          >
+            <div className="flex items-center gap-3 flex-1 px-4 py-3 border border-[#E7E9F5] rounded-xl focus-within:ring-2 focus-within:ring-[#2A4BFF] focus-within:border-transparent transition-all">
+              <Search size={18} className="text-[#5B5F79] shrink-0" />
+              <input
+                role="combobox"
+                aria-label="Search jobs by title, skills, or company"
+                aria-autocomplete="list"
+                aria-expanded="false"
+                aria-controls={titleSuggestionsId}
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                placeholder="Job title, skills, or company"
+                className="w-full outline-none text-sm placeholder:text-[#9298B5] text-[#12142B] font-medium bg-transparent"
+              />
+            </div>
+            <div className="flex items-center gap-3 flex-1 px-4 py-3 border border-[#E7E9F5] rounded-xl focus-within:ring-2 focus-within:ring-[#2A4BFF] focus-within:border-transparent transition-all">
+              <MapPin size={18} className="text-[#5B5F79] shrink-0" />
+              <input
+                role="combobox"
+                aria-label="Job location"
+                aria-autocomplete="list"
+                value={searchLocation}
+                onChange={(e) => setSearchLocation(e.target.value)}
+                placeholder="City, remote, or state"
+                className="w-full outline-none text-sm placeholder:text-[#9298B5] text-[#12142B] font-medium bg-transparent"
+              />
+            </div>
+            <button
+              onClick={() => {}}
+              className="bg-[#2A4BFF] hover:bg-[#1E39CC] text-white font-bold text-sm px-8 py-3 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95"
+            >
+              Find Matches
             </button>
           </div>
+
+          {/* Filter pills */}
+          <div role="group" aria-label="Filter jobs" className="flex flex-wrap gap-2 mt-4 items-center">
+            <span className="text-xs font-bold text-[#5B5F79] uppercase tracking-wider mr-1">Quick Filters:</span>
+            {FILTERS.map((f) => {
+              const active = activeFilters.includes(f);
+              return (
+                <button
+                  key={f}
+                  aria-pressed={active}
+                  onClick={() => toggleFilter(f)}
+                  className={`text-sm font-semibold px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                    active
+                      ? "bg-[#2A4BFF] border-[#2A4BFF] text-white shadow-sm"
+                      : "bg-white border-[#E7E9F5] text-[#5B5F79] hover:border-[#2A4BFF] hover:text-[#2A4BFF]"
+                  }`}
+                >
+                  {f} {active && "✓"}
+                </button>
+              );
+            })}
+            {(activeFilters.length > 0 || searchTitle || searchLocation) && (
+              <button
+                onClick={() => {
+                  setActiveFilters([]);
+                  setSearchTitle("");
+                  setSearchLocation("");
+                }}
+                className="text-xs font-semibold text-[#2A4BFF] hover:underline ml-2"
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-    </AppShell>
+      </section>
+
+      {/* Results + detail split view */}
+      <main className="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
+        <div
+          aria-live="polite"
+          className="sr-only"
+        >{`Showing ${filteredJobs.length} job matches`}</div>
+
+        {/* Left: results list (40% width / 2 cols) */}
+        <div className="lg:col-span-2 flex flex-col gap-4 max-h-[calc(100vh-210px)] overflow-y-auto pr-1">
+          {filteredJobs.length === 0 ? (
+            <div className="bg-white rounded-2xl p-8 border border-[#E7E9F5] text-center">
+              <p className="text-base font-bold text-[#12142B]">No job matches found</p>
+              <p className="text-sm text-[#5B5F79] mt-1">Try clearing filters or searching for different keywords.</p>
+              <button
+                onClick={() => {
+                  setActiveFilters([]);
+                  setSearchTitle("");
+                  setSearchLocation("");
+                }}
+                className="mt-4 px-4 py-2 rounded-xl bg-[#2A4BFF] text-white text-xs font-bold"
+              >
+                Reset Filters
+              </button>
+            </div>
+          ) : (
+            filteredJobs.map((job) => {
+              const isSelected = job.id === selected.id;
+              const isBookmarked = savedJobs.includes(job.id);
+              return (
+                <button
+                  key={job.id}
+                  aria-pressed={isSelected}
+                  onClick={() => setSelectedId(job.id)}
+                  className={`text-left bg-white rounded-2xl p-5 border transition-all focus:outline-none focus:ring-2 focus:ring-[#2A4BFF] relative cursor-pointer ${
+                    isSelected
+                      ? "border-l-4 border-l-[#2A4BFF] border-y-[#E7E9F5] border-r-[#E7E9F5] bg-[#F5F7FF] shadow-sm"
+                      : "border-[#E7E9F5] hover:border-[#2A4BFF]/40 hover:shadow-sm"
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="inline-flex items-center gap-1 text-xs font-extrabold text-white px-3 py-1 rounded-full bg-gradient-to-r from-[#2A4BFF] to-[#22D3C9] shadow-sm">
+                      {job.match}% Match
+                    </span>
+                    <button
+                      type="button"
+                      aria-label={isBookmarked ? "Remove saved job" : "Save job"}
+                      onClick={(e) => toggleBookmark(e, job.id)}
+                      className={`p-1.5 rounded-lg transition-colors ${
+                        isBookmarked
+                          ? "text-[#2A4BFF] bg-[#2A4BFF]/10"
+                          : "text-[#9298B5] hover:text-[#2A4BFF] hover:bg-[#F0F2FF]"
+                      }`}
+                    >
+                      <Bookmark size={18} fill={isBookmarked ? "#2A4BFF" : "none"} />
+                    </button>
+                  </div>
+                  <h3 className="font-extrabold text-lg leading-tight text-[#12142B]">{job.title}</h3>
+                  <p className="text-[#2A4BFF] font-semibold text-sm mt-1 hover:underline">{job.company}</p>
+                  <p className="text-[#5B5F79] text-sm mt-0.5">{job.location}</p>
+                  <p className="text-[#5B5F79] text-sm font-semibold mt-1">{job.salary}</p>
+
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {job.matchedSkills.slice(0, 3).map((skill, idx) => (
+                      <span key={idx} className="text-[11px] font-semibold text-[#2A4BFF] bg-[#2A4BFF]/10 px-2 py-0.5 rounded-md">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <p className="text-[#12142B] text-xs font-semibold mt-3 bg-[#F0F2FF] inline-block px-3 py-1.5 rounded-full">
+                    ✦ {job.reason}
+                  </p>
+                </button>
+              );
+            })
+          )}
+        </div>
+
+        {/* Right: sticky detail panel (60% width / 3 cols) */}
+        <div className="lg:col-span-3">
+          {selected ? (
+            <div className="bg-white rounded-2xl border border-[#E7E9F5] shadow-sm p-8 sticky top-24 max-h-[calc(100vh-140px)] overflow-y-auto">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h1 className="text-3xl font-extrabold leading-tight text-[#12142B]">{selected.title}</h1>
+                  <a
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                    className="inline-flex items-center gap-1 text-[#2A4BFF] font-bold text-base mt-2 hover:underline"
+                  >
+                    {selected.company} <ExternalLink size={16} />
+                  </a>
+                  <p className="text-[#5B5F79] text-sm mt-1">{selected.location} • <span className="font-medium">{selected.posted}</span></p>
+                  <p className="font-extrabold text-xl text-[#12142B] mt-2">{selected.salary}</p>
+                </div>
+                <span className="inline-flex items-center gap-1 text-sm font-extrabold text-white px-4 py-1.5 rounded-full bg-gradient-to-r from-[#2A4BFF] to-[#22D3C9] shadow-md flex-shrink-0">
+                  {selected.match}% AI Match
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-3 mt-6">
+                <button
+                  onClick={() => handleApply(selected.id)}
+                  disabled={isSelectedApplied}
+                  className={`font-bold px-7 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer ${
+                    isSelectedApplied
+                      ? "bg-green-600 text-white cursor-default"
+                      : "bg-[#2A4BFF] hover:bg-[#1E39CC] text-white hover:shadow-lg active:scale-95"
+                  }`}
+                >
+                  {isSelectedApplied ? (
+                    <>
+                      <CheckCircle2 size={18} /> Applied with Copilot
+                    </>
+                  ) : (
+                    <>
+                      Apply with Copilot <ArrowRight size={16} />
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={(e) => toggleBookmark(e, selected.id)}
+                  className={`flex items-center gap-2 border font-semibold px-5 py-3 rounded-xl transition-all cursor-pointer ${
+                    isSelectedSaved
+                      ? "bg-[#2A4BFF]/10 border-[#2A4BFF] text-[#2A4BFF]"
+                      : "border-[#E7E9F5] text-[#12142B] hover:border-[#2A4BFF] hover:text-[#2A4BFF]"
+                  }`}
+                >
+                  <Bookmark size={18} fill={isSelectedSaved ? "#2A4BFF" : "none"} />
+                  {isSelectedSaved ? "Saved" : "Save"}
+                </button>
+              </div>
+
+              <hr className="my-8 border-[#E7E9F5]" />
+
+              <h2 className="font-extrabold text-xl text-[#12142B] mb-4">Job details</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 bg-[#F7F8FC] p-4 rounded-xl border border-[#E7E9F5]">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-[#2A4BFF]/10 text-[#2A4BFF]">
+                    <DollarSign size={18} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#5B5F79] font-bold uppercase tracking-wider">Pay</p>
+                    <p className="text-sm font-bold text-[#12142B] mt-0.5">{selected.salary}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-[#2A4BFF]/10 text-[#2A4BFF]">
+                    <Briefcase size={18} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#5B5F79] font-bold uppercase tracking-wider">Job type</p>
+                    <p className="text-sm font-bold text-[#12142B] mt-0.5">{selected.type} ({selected.workplace})</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-[#2A4BFF]/10 text-[#2A4BFF]">
+                    <GraduationCap size={18} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#5B5F79] font-bold uppercase tracking-wider">Experience</p>
+                    <p className="text-sm font-bold text-[#12142B] mt-0.5">{selected.level}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Skills Match Breakdown */}
+              <div className="mb-8">
+                <h3 className="font-extrabold text-base text-[#12142B] mb-3">Skills Analysis</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selected.matchedSkills.map((s, i) => (
+                    <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 font-semibold text-xs border border-green-200">
+                      <Check size={14} className="text-green-600" /> {s}
+                    </span>
+                  ))}
+                  {selected.missingSkills.map((s, i) => (
+                    <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 font-medium text-xs border border-gray-200">
+                      • Missing: {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Why you're a fit AI card */}
+              <div className="bg-[#F0F2FF] rounded-2xl p-6 border border-[#2A4BFF]/15">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#2A4BFF] flex items-center justify-center text-white">
+                    <Sparkles size={18} />
+                  </div>
+                  <h3 className="font-extrabold text-lg text-[#12142B]">Why you're a fit</h3>
+                </div>
+                <ul className="space-y-2.5 mt-4" style={{ listStyle: "none" }}>
+                  {selected.fitReasons.map((r, i) => (
+                    <li key={i} className="text-sm text-[#3D4160] font-medium flex items-start gap-2.5">
+                      <span className="text-[#2A4BFF] font-bold text-base leading-none mt-0.5">•</span>
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </main>
+    </div>
   );
 }
