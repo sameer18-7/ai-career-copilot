@@ -54,7 +54,7 @@ export default function CollegeLogin() {
                         <div className="bg-indigo-100 p-2 rounded-lg">
                             <span className="material-symbols-outlined text-indigo-600 text-xl">badge</span>
                         </div>
-                        <span className="text-[15px] font-bold text-gray-900">Working Professionals Portal</span>
+                        <span className="text-[15px] font-bold text-gray-900">Individuals Portal</span>
                     </div>
 
                     {error && (
@@ -66,10 +66,10 @@ export default function CollegeLogin() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {isSignUp && (
                             <div>
-                                <label className="block text-[14px] font-semibold text-gray-700 mb-1.5">College Name</label>
+                                <label className="block text-[14px] font-semibold text-gray-700 mb-1.5">Full Name</label>
                                 <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">domain</span>
-                                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 placeholder-gray-400" placeholder="College name" />
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">person</span>
+                                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 placeholder-gray-400" placeholder="Your name" />
                                 </div>
                             </div>
                         )}
@@ -77,17 +77,17 @@ export default function CollegeLogin() {
                             <label className="block text-[14px] font-semibold text-gray-700 mb-1.5">Email Address</label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">mail</span>
-                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 placeholder-gray-400" placeholder="admin@college.edu" />
+                                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 placeholder-gray-400" placeholder="user@example.com" />
                             </div>
                         </div>
                         <div>
                             <label className="block text-[14px] font-semibold text-gray-700 mb-1.5">Password</label>
                             <div className="relative">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-[20px]">lock</span>
-                                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 placeholder-gray-400" placeholder="••••••" />
+                                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full pl-10 pr-4 py-3 bg-white/50 border border-white/60 rounded-xl text-[15px] focus:outline-none focus:ring-2 focus:ring-indigo-500/50 placeholder-gray-400" placeholder="••••••" />
                             </div>
                         </div>
-                        <button type="submit" disabled={loading} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl text-[16px] font-semibold transition-colors shadow-lg shadow-emerald-900/20 disabled:opacity-50 flex items-center justify-center gap-2">
+                        <button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl text-[16px] font-semibold transition-colors shadow-lg shadow-indigo-900/20 disabled:opacity-50 flex items-center justify-center gap-2">
                             {loading ? (
                                 <><span className="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>Processing...</>
                             ) : (
@@ -98,19 +98,15 @@ export default function CollegeLogin() {
 
                     <p className="text-center mt-5 text-[14px] text-gray-500">
                         {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-                        <button onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="text-emerald-600 font-semibold hover:underline">
+                        <button onClick={() => { setIsSignUp(!isSignUp); setError(''); }} className="text-indigo-600 font-semibold hover:underline">
                             {isSignUp ? 'Sign In' : 'Sign Up'}
                         </button>
                     </p>
                 </div>
 
-                <div className="mt-6 flex justify-center gap-4 text-[13px]">
-                    <a href="/auth/login/student" className="text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[16px]">school</span>Student
-                    </a>
-                    <span className="text-gray-300">|</span>
-                    <a href="/auth/login/company" className="text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[16px]">business</span>Company
+                <div className="mt-6 flex justify-center text-[13px]">
+                    <a href="/auth/login/company" className="text-gray-600 hover:text-gray-900 font-medium transition-colors flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[18px]">business</span>Switch to Business
                     </a>
                 </div>
             </div>

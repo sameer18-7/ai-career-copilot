@@ -104,13 +104,9 @@ export default function CompanyLogin() {
                     </p>
                 </div>
 
-                <div className="mt-6 flex justify-center gap-4 text-[13px]">
-                    <a href="/auth/login/student" className="text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[16px]">school</span>Student
-                    </a>
-                    <span className="text-gray-300">|</span>
-                    <a href="/auth/login/college" className="text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[16px]">account_balance</span>College
+                <div className="mt-6 flex justify-center text-[13px]">
+                    <a href="/auth/login/college" className="text-gray-600 hover:text-gray-900 font-medium transition-colors flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[18px]">badge</span>Switch to Individuals
                     </a>
                 </div>
             </div>
