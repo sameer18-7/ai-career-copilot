@@ -6,14 +6,13 @@ import { usePathname } from 'next/navigation';
 
 const navItems = [
     { href: '/company', label: 'Business Portal', icon: Building2, color: 'from-indigo-500 to-purple-500' },
-    { href: '/student', label: 'Students Portal', icon: GraduationCap, color: 'from-purple-500 to-pink-500' },
-    { href: '/college', label: 'Working Professionals', icon: School, color: 'from-violet-500 to-indigo-500' },
+    { href: '/individual', label: 'Individuals Portal', icon: School, color: 'from-blue-500 to-indigo-500' },
 ];
 
 export default function Navbar() {
     const pathname = usePathname();
 
-    if (pathname.startsWith('/student')) {
+    if (pathname.startsWith('/individual') || pathname.startsWith('/company')) {
         return null;
     }
 

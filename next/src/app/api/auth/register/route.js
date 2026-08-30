@@ -16,14 +16,23 @@ export async function POST(request) {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
+        const normalizedRole = role === 'BUSINESS' ? 'BUSINESS' : 'INDIVIDUAL';
+
         const user = await db.user.create({
             data: {
                 name: name || email.split('@')[0],
                 email,
                 password: hashedPassword,
-                role: role || 'student',
+                role: normalizedRole,
             },
         });
+
+        // Auto-create profile record based on role
+        if (normalizedRole === 'INDIVIDUAL') {
+            await db.individual.create({
+                data: { userId: user.id, skills: [], isOpenToWork: true },
+            });
+        }
 
         return NextResponse.json({ message: 'User created successfully', userId: user.id }, { status: 201 });
     } catch (error) {

@@ -22,14 +22,14 @@ export default function IndividualsLogin() {
                 const res = await fetch('/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, role: 'college' }),
+                    body: JSON.stringify({ name, email, password, role: 'INDIVIDUAL' }),
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Registration failed');
             }
             const result = await signIn('credentials', { email, password, redirect: false });
             if (result?.error) throw new Error('Invalid email or password');
-            router.push('/college');
+            router.push('/individual');
         } catch (err) {
             setError(err.message);
         } finally {

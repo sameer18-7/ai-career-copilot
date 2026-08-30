@@ -89,12 +89,12 @@ export default function LandingPage() {
 
                 <div className="grid grid-cols-3 gap-6">
                     {[
-                        { icon: 'smart_toy', title: 'Gemini AI Resume Screening', desc: 'Upload resumes and let our AI rank candidates based on job requirements — completely blind, bias-free, and instant.' },
-                        { icon: 'route', title: 'Career Roadmapping', desc: 'Students get personalized skill gap analysis and a step-by-step roadmap to their dream job, powered by AI.' },
-                        { icon: 'analytics', title: 'Real-Time Placement Analytics', desc: 'Placement cells get live dashboards with trend charts, batch analytics, and company-student mapping.' },
-                        { icon: 'verified_user', title: 'Blind Hiring Principles', desc: 'Names, photos, and personal info are hidden during screening. Only skills and experience matter.' },
-                        { icon: 'hub', title: 'Company-Student Matching', desc: 'AI matches students to companies based on skill compatibility, producing instant shortlists.' },
-                        { icon: 'security', title: 'Secure & Role-Based', desc: 'Every user gets a role-specific portal. Data is encrypted, passwords are hashed, sessions secured.' },
+                        { icon: 'smart_toy', title: 'Gemini AI Candidate Matching', desc: 'Find top talent matched precisely to your job requirements — bias-free, data-driven, and instant.' },
+                        { icon: 'route', title: 'Career Growth & Gap Analysis', desc: 'Professionals get personalized skill gap analysis and step-by-step career progression roadmaps.' },
+                        { icon: 'analytics', title: 'Real-Time Hiring Analytics', desc: 'Businesses get live metrics on applicants, shortlists, interview pipelines, and talent fit.' },
+                        { icon: 'verified_user', title: 'Skill-First Evaluation', desc: 'Focus strictly on demonstrated capabilities, domain experience, and technical achievements.' },
+                        { icon: 'hub', title: 'Smart Job Matching', desc: 'AI automatically connects professionals with relevant open positions at top hiring organizations.' },
+                        { icon: 'security', title: 'Secure & Role-Based', desc: 'Dedicated portals for Businesses and Individuals with encrypted authentication and session management.' },
                     ].map((feature) => (
                         <div key={feature.title} className="rounded-2xl p-7 border border-white/50 shadow-sm hover:shadow-md transition-all group" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
                             <div className="bg-white/40 w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
@@ -112,32 +112,10 @@ export default function LandingPage() {
                 <div className="text-center mb-[56px]">
                     <span className="inline-block px-3 py-1 bg-emerald-600/10 text-emerald-600 text-[13px] font-bold rounded-full mb-4 border border-emerald-600/20">GET STARTED</span>
                     <h2 className="text-[36px] font-bold text-gray-900 mb-3">Choose Your Portal</h2>
-                    <p className="text-[16px] text-gray-500 max-w-[480px] mx-auto">Three portals, one platform. Sign in to the experience built for your role.</p>
+                    <p className="text-[16px] text-gray-500 max-w-[480px] mx-auto">Two tailored portals. Sign in to the experience built for your role.</p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-8">
-                    {/* Student */}
-                    <a href="/auth/login/individuals" className="group block rounded-2xl border border-white/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
-                        <div className="h-[6px] bg-gradient-to-r from-blue-500 to-blue-600"></div>
-                        <div className="p-8">
-                            <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <span className="material-symbols-outlined text-blue-600 text-[32px]">school</span>
-                            </div>
-                            <h3 className="text-[22px] font-bold text-gray-900 mb-3">Students Portal</h3>
-                            <p className="text-[14px] text-gray-500 leading-relaxed mb-6">Discover your career roadmap, analyze skill gaps, upload resumes, and get matched with top companies.</p>
-                            <ul className="space-y-2 mb-8">
-                                {['AI Career Roadmap', 'Skill Gap Analysis', 'Job Matching', 'Resume Upload'].map((item) => (
-                                    <li key={item} className="flex items-center gap-2 text-[13px] text-gray-600">
-                                        <span className="material-symbols-outlined text-green-500 text-[16px]">check_circle</span>{item}
-                                    </li>
-                                ))}
-                            </ul>
-                            <div className="flex items-center gap-2 text-blue-600 font-semibold text-[15px] group-hover:gap-3 transition-all">
-                                Enter as Student<span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                            </div>
-                        </div>
-                    </a>
-
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[900px] mx-auto">
                     {/* Business */}
                     <a href="/auth/login/company" className="group block rounded-2xl border border-white/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
                         <div className="h-[6px] bg-gradient-to-r from-indigo-500 to-indigo-600"></div>
@@ -146,9 +124,9 @@ export default function LandingPage() {
                                 <span className="material-symbols-outlined text-indigo-600 text-[32px]">business</span>
                             </div>
                             <h3 className="text-[22px] font-bold text-gray-900 mb-3">Business Portal</h3>
-                            <p className="text-[14px] text-gray-500 leading-relaxed mb-6">Post jobs, upload bulk resumes, and let Gemini AI rank candidates with blind hiring — zero bias, instant results.</p>
+                            <p className="text-[14px] text-gray-500 leading-relaxed mb-6">Post job openings, discover experienced professionals, manage applicants, and streamline technical hiring.</p>
                             <ul className="space-y-2 mb-8">
-                                {['Gemini AI Screening', 'Blind Hiring', 'Candidate Leaderboard', 'Email Automation'].map((item) => (
+                                {['Post Job Openings', 'Skill-Based Candidate Match', 'Applicant Pipeline', 'Interview Management'].map((item) => (
                                     <li key={item} className="flex items-center gap-2 text-[13px] text-gray-600">
                                         <span className="material-symbols-outlined text-green-500 text-[16px]">check_circle</span>{item}
                                     </li>
@@ -162,21 +140,21 @@ export default function LandingPage() {
 
                     {/* Working Professionals */}
                     <a href="/auth/login/individuals" className="group block rounded-2xl border border-white/50 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
-                        <div className="h-[6px] bg-gradient-to-r from-emerald-500 to-emerald-600"></div>
+                        <div className="h-[6px] bg-gradient-to-r from-blue-500 to-blue-600"></div>
                         <div className="p-8">
-                            <div className="bg-emerald-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <span className="material-symbols-outlined text-emerald-600 text-[32px]">badge</span>
+                            <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <span className="material-symbols-outlined text-blue-600 text-[32px]">badge</span>
                             </div>
                             <h3 className="text-[22px] font-bold text-gray-900 mb-3">Working Professionals Portal</h3>
-                            <p className="text-[14px] text-gray-500 leading-relaxed mb-6">Explore career advancement, analyze skill gaps, get AI matched with top opportunities, and transition seamlessly.</p>
+                            <p className="text-[14px] text-gray-500 leading-relaxed mb-6">Explore career opportunities, analyze skill match with open roles, track applications, and accelerate your career growth.</p>
                             <ul className="space-y-2 mb-8">
-                                {['Career Advancement', 'Skill Gap Analysis', 'Targeted Job Matching', 'Experience Showcase'].map((item) => (
+                                {['Curated Job Matches', 'Skill Gap Analysis', 'One-Click Quick Apply', 'Application Tracking'].map((item) => (
                                     <li key={item} className="flex items-center gap-2 text-[13px] text-gray-600">
                                         <span className="material-symbols-outlined text-green-500 text-[16px]">check_circle</span>{item}
                                     </li>
                                 ))}
                             </ul>
-                            <div className="flex items-center gap-2 text-indigo-600 font-semibold text-[15px] group-hover:gap-3 transition-all">
+                            <div className="flex items-center gap-2 text-blue-600 font-semibold text-[15px] group-hover:gap-3 transition-all">
                                 Enter as Professional<span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                             </div>
                         </div>

@@ -9,21 +9,19 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String      @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  role          String    @default("student")
-  collegeId     String?
-  companyId     String?
   password      String?
+  role          String      @default("INDIVIDUAL")
+  createdAt     DateTime    @default(now())
   accounts      Account[]
   sessions      Session[]
-  student       Student?
-  college       College?  @relation(fields: [collegeId], references: [id])
-  company       Company?  @relation(fields: [companyId], references: [id])
+  individual    Individual?
+  company       Company?    @relation(fields: [companyId], references: [id])
+  companyId     String?
 }
 
 model Account {
@@ -60,228 +58,83 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model College {
-  id              String           @id @default(cuid())
-  name            String
-  city            String?
-  state           String?
-  website         String?
-  createdAt       DateTime         @default(now())
-  placementDrives PlacementDrive[]
-  students        Student[]
-  users           User[]
-}
-
 model Company {
-  id              String           @id @default(cuid())
-  name            String           @unique
-  website         String?
-  industry        String?
-  logoUrl         String?
-  createdAt       DateTime         @default(now())
-  gapAnalyses     GapAnalysis[]
-  jobPostings     JobPosting[]
-  placementDrives PlacementDrive[]
-  placementOffers PlacementOffer[]
-  users           User[]
-}
-
-model Student {
-  id                     String           @id @default(cuid())
-  userId                 String           @unique
-  collegeId              String?
-  rollNumber             String?
-  branch                 String?
-  batchYear              Int?
-  cgpa                   Decimal?         @db.Decimal(3, 1)
-  linkedin               String?
-  github                 String?
-  portfolio              String?
-  phone                  String?
-  isPlaced               Boolean          @default(false)
-  createdAt              DateTime         @default(now())
-  improvementSuggestions Json?
-  readinessBreakdown     Json?
-  readinessScore         Int?             @default(0)
-  applications           Application[]
-  gapAnalyses            GapAnalysis[]
-  placementOffers        PlacementOffer[]
-  resumes                Resume[]
-  college                College?         @relation(fields: [collegeId], references: [id])
-  user                   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  skills                 StudentSkill[]
-}
-
-model Skill {
-  id              String           @id @default(cuid())
-  name            String           @unique
-  jobRequirements JobRequirement[]
-  studentSkills   StudentSkill[]
-}
-
-model StudentSkill {
-  studentId String
-  skillId   String
-  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@id([studentId, skillId])
-}
-
-model Resume {
-  id           String        @id @default(cuid())
-  studentId    String
-  fileName     String?
-  storagePath  String?
-  parsedText   String?
-  isPrimary    Boolean       @default(true)
-  uploadedAt   DateTime      @default(now())
-  applications Application[]
-  student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-}
-
-model PlacementDrive {
   id          String       @id @default(cuid())
-  collegeId   String
-  companyId   String
-  driveDate   DateTime?    @db.Date
-  status      String       @default("upcoming")
+  name        String       @unique
+  website     String?
+  industry    String?
+  logoUrl     String?
   description String?
+  location    String?
+  size        String?
   createdAt   DateTime     @default(now())
+  users       User[]
   jobPostings JobPosting[]
-  college     College      @relation(fields: [collegeId], references: [id])
-  company     Company      @relation(fields: [companyId], references: [id])
 }
 
 model JobPosting {
-  id              String           @id @default(cuid())
-  driveId         String?
-  companyId       String
-  title           String
-  description     String?
-  packageLpa      Decimal?         @db.Decimal(5, 2)
-  roleType        String           @default("full_time")
-  status          String           @default("active")
-  createdAt       DateTime         @default(now())
-  applications    Application[]
-  company         Company          @relation(fields: [companyId], references: [id])
-  drive           PlacementDrive?  @relation(fields: [driveId], references: [id])
-  requirements    JobRequirement[]
-  placementOffers PlacementOffer[]
-}
-
-model JobRequirement {
-  jobId   String
-  skillId String
-  job     JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  skill   Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
-
-  @@id([jobId, skillId])
-}
-
-model Application {
-  id              String          @id @default(cuid())
-  jobId           String
-  studentId       String
-  resumeId        String?
-  matchScore      Decimal?        @db.Decimal(5, 2)
-  aiJustification String?
-  status          String          @default("applied")
-  shortlisted     Boolean         @default(false)
-  appliedAt       DateTime        @default(now())
-  interviewRounds Json?
-  notes           String?
-  interviewLink   String?
-  scheduledDate   DateTime?
-  job             JobPosting      @relation(fields: [jobId], references: [id])
-  resume          Resume?         @relation(fields: [resumeId], references: [id])
-  student         Student         @relation(fields: [studentId], references: [id])
-  placementOffer  PlacementOffer?
-
-  @@unique([jobId, studentId])
-}
-
-model PlacementOffer {
-  id            String      @id @default(cuid())
-  applicationId String      @unique
-  studentId     String
+  id            String           @id @default(cuid())
   companyId     String
-  jobId         String
-  packageLpa    Decimal?    @db.Decimal(5, 2)
-  offerDate     DateTime?   @db.Date
-  joiningDate   DateTime?   @db.Date
-  status             String      @default("pending")
-  retentionRisk      String?     // High, Medium, Low
-  riskJustification String?
-  createdAt          DateTime    @default(now())
-  application        Application @relation(fields: [applicationId], references: [id])
-  company       Company     @relation(fields: [companyId], references: [id])
-  job           JobPosting  @relation(fields: [jobId], references: [id])
-  student       Student     @relation(fields: [studentId], references: [id])
-}
-
-model GapAnalysis {
-  id           String        @id @default(cuid())
-  studentId    String
-  companyId    String
-  targetRole   String?
-  createdAt    DateTime      @default(now())
-  courses      Course[]
-  company      Company       @relation(fields: [companyId], references: [id])
-  student      Student       @relation(fields: [studentId], references: [id])
-  gapItems     GapItem[]
-  roadmapSteps RoadmapStep[]
-}
-
-model GapItem {
-  id            String      @id @default(cuid())
-  gapAnalysisId String
-  skillName     String
-  severity      String?
+  title         String
   description   String?
-  gapAnalysis   GapAnalysis @relation(fields: [gapAnalysisId], references: [id], onDelete: Cascade)
+  location      String?
+  jobType       String           @default("full_time")
+  experienceMin Int?
+  experienceMax Int?
+  salaryMin     Decimal?         @db.Decimal(10, 2)
+  salaryMax     Decimal?         @db.Decimal(10, 2)
+  skills        String[]
+  status        String           @default("active")
+  createdAt     DateTime         @default(now())
+  company       Company          @relation(fields: [companyId], references: [id])
+  applications  JobApplication[]
 }
 
-model RoadmapStep {
-  id            String      @id @default(cuid())
-  gapAnalysisId String
-  phase         String?
-  title         String?
-  description   String?
-  stepType      String?
-  orderIndex    Int         @default(0)
-  gapAnalysis   GapAnalysis @relation(fields: [gapAnalysisId], references: [id], onDelete: Cascade)
+model Individual {
+  id              String           @id @default(cuid())
+  userId          String           @unique
+  headline        String?
+  location        String?
+  phone           String?
+  linkedin        String?
+  github          String?
+  portfolio       String?
+  currentRole     String?
+  currentCompany  String?
+  totalExperience Int?
+  skills          String[]
+  bio             String?
+  resumeUrl       String?
+  isOpenToWork    Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applications    JobApplication[]
+  experiences     WorkExperience[]
 }
 
-model Course {
-  id            String      @id @default(cuid())
-  gapAnalysisId String
-  title         String?
-  platform      String?
-  instructor    String?
-  rating        Decimal?    @db.Decimal(2, 1)
-  url           String?
-  durationText  String?
-  price         String?
-  category      String?
-  difficulty    String?
-  ratingsCount  Int?        @default(0)
-  gapAnalysis   GapAnalysis @relation(fields: [gapAnalysisId], references: [id], onDelete: Cascade)
+model WorkExperience {
+  id           String     @id @default(cuid())
+  individualId String
+  role         String
+  company      String
+  startDate    DateTime?  @db.Date
+  endDate      DateTime?  @db.Date
+  description  String?
+  individual   Individual @relation(fields: [individualId], references: [id], onDelete: Cascade)
 }
 
-model TrustOffer {
-  id              String    @id
-  companyName     String
-  candidateName   String
-  roleTitle       String
-  packageLPA      Float
-  status          String    @default("Pending")
-  attestationUID  String    @unique
-  attestationSig  String
-  attestationData Json
-  signerAddress   String
-  acceptedAt      DateTime?
-  rescindedAt     DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime
+model JobApplication {
+  id           String     @id @default(cuid())
+  jobId        String
+  individualId String
+  coverLetter  String?
+  matchScore   Decimal?   @db.Decimal(5, 2)
+  status       String     @default("applied")
+  appliedAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  notes        String?
+  job          JobPosting @relation(fields: [jobId], references: [id])
+  individual   Individual @relation(fields: [individualId], references: [id])
+
+  @@unique([jobId, individualId])
 }
