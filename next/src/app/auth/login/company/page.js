@@ -45,7 +45,7 @@ export default function CompanyLogin() {
                         <div className="bg-[#1a1a1a] p-2.5 rounded-lg">
                             <span className="material-symbols-outlined text-white text-2xl">grid_view</span>
                         </div>
-                        <span className="text-[24px] font-bold tracking-tight text-gray-900">Placify</span>
+                        <span className="text-[24px] font-bold tracking-tight text-gray-900">linker.intel</span>
                     </a>
                 </div>
 
@@ -54,7 +54,7 @@ export default function CompanyLogin() {
                         <div className="bg-indigo-100 p-2 rounded-lg">
                             <span className="material-symbols-outlined text-indigo-600 text-xl">business</span>
                         </div>
-                        <span className="text-[15px] font-bold text-gray-900">Company / HR Portal</span>
+                        <span className="text-[15px] font-bold text-gray-900">Business Portal</span>
                     </div>
 
                     {error && (

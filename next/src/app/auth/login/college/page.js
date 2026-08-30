@@ -45,16 +45,16 @@ export default function CollegeLogin() {
                         <div className="bg-[#1a1a1a] p-2.5 rounded-lg">
                             <span className="material-symbols-outlined text-white text-2xl">grid_view</span>
                         </div>
-                        <span className="text-[24px] font-bold tracking-tight text-gray-900">Placify</span>
+                        <span className="text-[24px] font-bold tracking-tight text-gray-900">linker.intel</span>
                     </a>
                 </div>
 
                 <div className="rounded-[20px] p-8 border border-white/50 shadow-lg" style={{ backgroundImage: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
                     <div className="flex items-center gap-2 mb-6">
-                        <div className="bg-emerald-100 p-2 rounded-lg">
-                            <span className="material-symbols-outlined text-emerald-600 text-xl">account_balance</span>
+                        <div className="bg-indigo-100 p-2 rounded-lg">
+                            <span className="material-symbols-outlined text-indigo-600 text-xl">badge</span>
                         </div>
-                        <span className="text-[15px] font-bold text-gray-900">College Admin Portal</span>
+                        <span className="text-[15px] font-bold text-gray-900">Working Professionals Portal</span>
                     </div>
 
                     {error && (
