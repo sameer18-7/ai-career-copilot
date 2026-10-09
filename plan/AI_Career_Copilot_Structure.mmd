@@ -1,0 +1,18 @@
+graph TD
+  R["Routes /src/routes"] --> M["Marketing pages"]
+  R --> A["Product pages"]
+  M --> H["Home"]
+  M --> F["Features"]
+  M --> P["Pricing"]
+  M --> AU["Login / Signup"]
+  A --> D["Dashboard"]
+  A --> RE["Resume Analyzer"]
+  A --> L["Learning Path"]
+  A --> IN["Interview Coach"]
+  A --> J["Job Matches"]
+  S["Shared blocks: Logo, MarketingNav, Footer, CtaBanner, Panel, SectionHeading, IconBadge, MetricCard, AppShell"]
+  M --> S
+  A --> S
+  S --> T["Design tokens in styles.css"]
+  FL["Five-pillar feature list"] --> H
+  FL --> F
