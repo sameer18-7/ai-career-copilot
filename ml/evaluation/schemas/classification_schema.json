@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ClassificationAnnotation",
+  "description": "Ground-truth category label for one resume (for evaluation only).",
+  "type": "object",
+  "required": ["example_id", "dataset_version", "status", "source", "resume_text_id", "true_category"],
+  "properties": {
+    "example_id":      { "type": "string" },
+    "dataset_version": { "type": "string" },
+    "status":          { "type": "string", "enum": ["draft", "reviewed"] },
+    "source":          { "type": "string", "enum": ["kaggle_resume_dataset", "synthetic", "permissioned"] },
+    "resume_text_id":  { "type": "string" },
+    "true_category": {
+      "type": "string",
+      "enum": [
+        "ACCOUNTANT","ADVOCATE","AGRICULTURE","APPAREL","ARTS",
+        "AUTOMOBILE","AVIATION","BANKING","BPO","BUSINESS-DEVELOPMENT",
+        "CHEF","CONSTRUCTION","CONSULTANT","DESIGNER","DIGITAL-MEDIA",
+        "ENGINEERING","FINANCE","FITNESS","HEALTHCARE","HR",
+        "INFORMATION-TECHNOLOGY","PUBLIC-RELATIONS","SALES","TEACHER"
+      ]
+    },
+    "ambiguous": { "type": "boolean", "description": "True if the example is borderline between categories" },
+    "notes": { "type": "string" }
+  }
+}

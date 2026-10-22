@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JobMatchingAnnotation",
+  "description": "Schema for resume-to-job relevance annotation. PENDING IMPLEMENTATION.",
+  "type": "object",
+  "required": ["example_id", "dataset_version", "status", "resume_text_id", "job_description_id", "reviewer_id", "relevance_grade"],
+  "properties": {
+    "example_id":          { "type": "string" },
+    "dataset_version":     { "type": "string" },
+    "status":              { "type": "string", "enum": ["draft", "reviewed"] },
+    "resume_text_id":      { "type": "string" },
+    "job_description_id":  { "type": "string" },
+    "reviewer_id":         { "type": "string" },
+    "relevance_grade": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "description": "0=Not relevant, 1=Weak, 2=Partial, 3=Good, 4=Strong"
+    },
+    "relevance_rationale": { "type": "string", "description": "Free-text justification for the grade" },
+    "notes": { "type": "string" },
+    "_implementation_note": {
+      "type": "string",
+      "const": "Job matching evaluation is PENDING. The current application only supports pairwise role-alignment scoring (TF-IDF cosine similarity), not top-k retrieval from a candidate pool. Ranked evaluation metrics (MRR, nDCG@k) cannot be computed until a ranked candidate set is implemented. This schema is provided for future annotation collection."
+    }
+  }
+}

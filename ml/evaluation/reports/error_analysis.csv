@@ -1,0 +1,21 @@
+example_id,field,error_type,expected,predicted
+P-004,name,wrong_value,Jane Doe,Django
+P-008,name,false_positive,,Fresh Graduate
+P-010,name,false_positive,,Statistician Resume
+P-011,name,false_positive,,Cloud Expert
+P-012,name,false_positive,,Docker
+P-012,skill,false_positive_should_not_appear,,kubernetes
+P-014,name,false_positive,,Grade
+P-016,skill,missed_entity,seo,
+P-016,skill,missed_entity,google analytics,
+P-020,name,false_positive,,Roadmap Planning
+P-021,name,wrong_value,Ms. Rachel Wong,Rachel Wong
+P-027,name,wrong_value,Lisa Chen,"Lisa Chen
+lisa.chen@hrpro.com"
+P-028,name,false_positive,,Designer
+P-029,name,false_positive,,Deep Learning
+P-030,name,false_positive,,"Dev
+dev@site.com"
+P-030,skill,false_positive_should_not_appear,,postgresql
+P-030,skill,false_positive_should_not_appear,,node.js
+P-030,skill,false_positive_should_not_appear,,javascript

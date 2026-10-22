@@ -1,0 +1,21 @@
+example_id,fixture_id,target_role,reviewer_id,reviewer_overall_10,reviewer_scaled_100,system_score_100,abs_error,sq_error,score_type
+A-001,F-001,software engineer,R1,8,80,50,30,900,role_based
+A-002,F-001,software engineer,R2,8,80,50,30,900,role_based
+A-003,F-002,data scientist,R1,7,70,64,6,36,role_based
+A-004,F-003,frontend developer,R1,2,20,20,0,0,role_based
+A-005,F-004,full-stack developer,R1,7,70,42,28,784,role_based
+A-006,F-005,devops engineer,R1,7,70,39,31,961,role_based
+A-007,F-006,nurse,R1,9,90,55,35,1225,role_based
+A-008,F-008,software engineer,R1,3,30,26,4,16,role_based
+A-009,F-009,machine learning engineer,R1,6,60,34,26,676,role_based
+A-010,F-010,data scientist,R1,6,60,28,32,1024,role_based
+A-011,F-011,cloud engineer,R1,9,90,30,60,3600,role_based
+A-012,F-012,backend developer,R1,5,50,33,17,289,role_based
+A-013,F-013,backend developer,R1,8,80,34,46,2116,role_based
+A-014,F-015,software engineer,R1,2,20,13,7,49,role_based
+A-015,F-020,product manager,R1,8,80,46,34,1156,role_based
+A-016,F-021,teacher,R1,9,90,61,29,841,role_based
+A-017,F-022,devops engineer,R1,9,90,58,32,1024,role_based
+A-018,F-023,financial analyst,R1,8,80,61,19,361,role_based
+A-019,F-025,software engineer,R1,0,0,0,0,0,role_based
+A-020,F-027,hr manager,R1,9,90,66,24,576,role_based

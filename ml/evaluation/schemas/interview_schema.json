@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "InterviewAnnotation",
+  "description": "Human-reviewed rubric rating for one interview answer.",
+  "type": "object",
+  "required": ["example_id", "dataset_version", "status", "question_id", "question_type", "answer_text_id", "reviewer_id", "rubric"],
+  "properties": {
+    "example_id":      { "type": "string" },
+    "dataset_version": { "type": "string" },
+    "status":          { "type": "string", "enum": ["draft", "reviewed", "adjudicated"] },
+    "question_id":     { "type": "string" },
+    "question_type":   { "type": "string", "enum": ["behavioral", "technical", "situational"] },
+    "answer_text_id":  { "type": "string" },
+    "reviewer_id":     { "type": "string" },
+    "rubric": {
+      "type": "object",
+      "description": "Ratings 0-4. -1 = not applicable for this question type.",
+      "required": ["relevance", "keyword_coverage", "depth"],
+      "properties": {
+        "relevance":        { "type": "integer", "minimum": -1, "maximum": 4,
+                             "description": "0=off-topic, 4=directly answers the question" },
+        "keyword_coverage": { "type": "integer", "minimum": -1, "maximum": 4,
+                             "description": "0=none of the key concepts addressed, 4=all key concepts" },
+        "star_structure":   { "type": "integer", "minimum": -1, "maximum": 4,
+                             "description": "Behavioral/situational only. -1 for technical. 0=no STAR, 4=complete STAR" },
+        "depth":            { "type": "integer", "minimum": -1, "maximum": 4,
+                             "description": "0=vague/generic, 4=specific metrics/examples/causality" },
+        "technical_accuracy": { "type": "integer", "minimum": -1, "maximum": 4,
+                             "description": "Technical questions only. -1 for behavioral." }
+      }
+    },
+    "system_score":  { "type": ["number", "null"], "description": "Score produced by evaluateAnswer() for comparison" },
+    "notes":         { "type": "string" }
+  }
+}

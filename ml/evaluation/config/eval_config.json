@@ -1,0 +1,43 @@
+{
+  "eval_version": "1.0.0",
+  "random_seed": 42,
+  "classifier": {
+    "csv_path": "plan/archive/Resume/Resume.csv",
+    "models_dir": "ml/models",
+    "test_size": 0.1,
+    "val_size": 0.1,
+    "stratify": true,
+    "dedup_column": "Resume_str",
+    "min_text_length": 50,
+    "baseline_strategy": "most_frequent"
+  },
+  "parser": {
+    "annotations_file": "ml/evaluation/annotations/parser_annotations.jsonl",
+    "fixtures_file": "ml/evaluation/fixtures/synthetic_resumes.jsonl",
+    "name_matching": "exact",
+    "email_matching": "exact",
+    "phone_matching": "normalized_digits",
+    "skill_matching": "canonical_lower",
+    "section_matching": "label_only",
+    "year_matching": "exact_integer"
+  },
+  "ats_scorer": {
+    "annotations_file": "ml/evaluation/annotations/ats_annotations.jsonl",
+    "score_scale": [0, 100],
+    "human_scale": [0, 10],
+    "target_role_default": "software engineer",
+    "spearman_min_samples": 5
+  },
+  "interview": {
+    "annotations_file": "ml/evaluation/annotations/interview_annotations.jsonl",
+    "rubric_dimensions": ["relevance", "keyword_coverage", "star_structure", "depth", "clarity"],
+    "min_answer_words": 10,
+    "reviewer_ids": ["R1", "R2"]
+  },
+  "job_matching": {
+    "status": "not_implemented",
+    "note": "Current implementation only supports pairwise role-alignment. A ranked candidate set does not exist. Schema is provided for future use.",
+    "k_values": [1, 3, 5]
+  },
+  "reports_dir": "ml/evaluation/reports"
+}

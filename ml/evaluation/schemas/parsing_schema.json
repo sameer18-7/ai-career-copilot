@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ResumeParserAnnotation",
+  "description": "Ground-truth annotation for one resume parsing example.",
+  "type": "object",
+  "required": ["example_id", "dataset_version", "status", "source", "resume_text_id", "ground_truth"],
+  "additionalProperties": false,
+  "properties": {
+    "example_id":      { "type": "string", "description": "Stable unique identifier (e.g. P-001)" },
+    "dataset_version": { "type": "string", "description": "e.g. synthetic-v1" },
+    "status":          { "type": "string", "enum": ["draft", "reviewed", "adjudicated"] },
+    "source":          { "type": "string", "enum": ["synthetic", "permissioned", "public"] },
+    "resume_text_id":  { "type": "string", "description": "Points to entry in synthetic_resumes.jsonl or external corpus" },
+    "reviewer_ids":    { "type": "array", "items": { "type": "string" } },
+    "notes":           { "type": "string" },
+    "ground_truth": {
+      "type": "object",
+      "required": ["candidate", "sections", "skills", "education", "experience"],
+      "properties": {
+        "candidate": {
+          "type": "object",
+          "properties": {
+            "name":     { "type": ["string", "null"], "description": "Exact name or null if not_present" },
+            "email":    { "type": ["string", "null"] },
+            "phone":    { "type": ["string", "null"] },
+            "linkedin": { "type": ["string", "null"] },
+            "github":   { "type": ["string", "null"] },
+            "portfolio":{ "type": ["string", "null"] },
+            "location": { "type": ["string", "null"] }
+          }
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "present"],
+            "properties": {
+              "label":   { "type": "string", "enum": ["summary","skills","experience","education","projects","certifications","achievements"] },
+              "present": { "type": "boolean" }
+            }
+          }
+        },
+        "skills": {
+          "type": "object",
+          "description": "Canonical skill names expected to be extracted",
+          "properties": {
+            "expected_canonical": { "type": "array", "items": { "type": "string" } },
+            "should_not_appear":  { "type": "array", "items": { "type": "string" }, "description": "False positives to check" }
+          }
+        },
+        "education": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "degree":      { "type": ["string", "null"] },
+              "institution": { "type": ["string", "null"] },
+              "year_end":    { "type": ["integer", "null"] }
+            }
+          }
+        },
+        "experience": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title":      { "type": ["string", "null"] },
+              "company":    { "type": ["string", "null"] },
+              "start_year": { "type": ["integer", "null"] },
+              "end_year":   { "type": ["integer", "string", "null"], "description": "integer or 'present'" }
+            }
+          }
+        },
+        "years_of_experience": {
+          "type": ["number", "null"],
+          "description": "Calculated or stated total years; null if not determinable"
+        }
+      }
+    }
+  }
+}

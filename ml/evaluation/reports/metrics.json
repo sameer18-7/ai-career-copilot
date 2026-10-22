@@ -1,0 +1,260 @@
+{
+  "run_at": "2026-10-22T19:30:24.520195+00:00",
+  "statuses": {
+    "classifier": "PASSED",
+    "parser": "PASSED",
+    "ats_scorer": "PASSED",
+    "interviews": "PASSED",
+    "job_matching": "SKIPPED (not implemented)"
+  },
+  "classifier": {
+    "task": "category_classifier",
+    "dataset": {
+      "path": "D:\\My Projects\\Career CoPILOT\\plan\\archive\\Resume\\Resume.csv",
+      "total_rows": 2483,
+      "duplicates_removed": 2,
+      "unique_resumes": 2481,
+      "test_set_size": 249,
+      "num_categories": 24,
+      "split_method": "stratified 80/10/10",
+      "split_seed": 42,
+      "leakage_note": "2 exact-text duplicates removed before split.",
+      "known_limitation": "The current model was trained with the same seed. The CSV-based split guarantees separation only if the CSV content is identical to what was used during training.py. If the source CSV was updated, model version and evaluation data may not correspond."
+    },
+    "baseline": {
+      "strategy": "most_frequent",
+      "most_frequent_class": "INFORMATION-TECHNOLOGY",
+      "accuracy": 0.0482,
+      "macro_f1": 0.0038
+    },
+    "metrics": {
+      "accuracy": 0.7349,
+      "macro_f1": 0.6949,
+      "weighted_f1": 0.7238
+    },
+    "class_imbalance_note": "Classes range from 22 (BPO) to 120 (IT, BD). Macro-F1 is preferred over accuracy.",
+    "top_misclassifications": [
+      {
+        "true": "ARTS",
+        "pred": "TEACHER",
+        "count": 3
+      },
+      {
+        "true": "SALES",
+        "pred": "BUSINESS-DEVELOPMENT",
+        "count": 3
+      },
+      {
+        "true": "AGRICULTURE",
+        "pred": "ENGINEERING",
+        "count": 2
+      },
+      {
+        "true": "BANKING",
+        "pred": "PUBLIC-RELATIONS",
+        "count": 2
+      },
+      {
+        "true": "CONSULTANT",
+        "pred": "BUSINESS-DEVELOPMENT",
+        "count": 2
+      },
+      {
+        "true": "ACCOUNTANT",
+        "pred": "ADVOCATE",
+        "count": 1
+      },
+      {
+        "true": "ADVOCATE",
+        "pred": "APPAREL",
+        "count": 1
+      },
+      {
+        "true": "ADVOCATE",
+        "pred": "BUSINESS-DEVELOPMENT",
+        "count": 1
+      },
+      {
+        "true": "ADVOCATE",
+        "pred": "HEALTHCARE",
+        "count": 1
+      },
+      {
+        "true": "ADVOCATE",
+        "pred": "PUBLIC-RELATIONS",
+        "count": 1
+      }
+    ],
+    "env": {
+      "python_version": "3.13.14",
+      "sklearn_version": "1.9.1",
+      "platform": "Windows",
+      "evaluated_at": "2026-10-22T19:30:22.409874+00:00",
+      "random_seed": 42
+    }
+  },
+  "parser": {
+    "task": "resume_parser",
+    "dataset": {
+      "source": "synthetic",
+      "num_fixtures": 30,
+      "num_annotations": 30,
+      "num_processed": 30,
+      "known_limitation": "ALL RESULTS ARE SYNTHETIC. Real-world performance requires human-annotated, permissioned resumes."
+    },
+    "metrics_by_field": {
+      "name": {
+        "precision": 0.64,
+        "recall": 1.0,
+        "f1": 0.7805,
+        "support": 16
+      },
+      "email": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 27
+      },
+      "phone": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 7
+      },
+      "linkedin": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "github": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 3
+      },
+      "portfolio": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 1
+      },
+      "skill_extraction": {
+        "precision": 0.5864,
+        "recall": 0.9847,
+        "f1": 0.735,
+        "support": 131
+      },
+      "section_detection": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 95
+      }
+    },
+    "years_of_experience_mae": 0.0,
+    "total_errors": 18,
+    "error_type_counts": {
+      "wrong_value": 3,
+      "false_positive": 9,
+      "false_positive_should_not_appear": 4,
+      "missed_entity": 2
+    },
+    "env": {
+      "python_version": "3.13.14",
+      "spacy_version": "3.8.16",
+      "spacy_model_version": "3.8.0",
+      "platform": "Windows",
+      "evaluated_at": "2026-10-22T19:30:24.152625+00:00"
+    }
+  },
+  "ats_scorer": {
+    "task": "ats_scorer",
+    "disclaimer": "ATS score is a deterministic rubric estimate, not a hiring probability or official employer ATS score. All annotations are SYNTHETIC. Real-world calibration requires human-reviewed, permissioned resumes. The scorer is NEVER calibrated against hiring outcomes.",
+    "dataset": {
+      "source": "synthetic",
+      "num_annotations": 20,
+      "num_evaluated": 20
+    },
+    "metrics": {
+      "mae_system_vs_reviewer_scaled_100": 24.5,
+      "rmse_system_vs_reviewer_scaled_100": 28.75,
+      "spearman_correlation": 0.7684
+    },
+    "score_band_agreement": {
+      "0-29": {
+        "agree": 3,
+        "total": 5
+      },
+      "30-59": {
+        "agree": 1,
+        "total": 11
+      },
+      "60-79": {
+        "agree": 1,
+        "total": 4
+      },
+      "80-100": {
+        "agree": 0,
+        "total": 0
+      }
+    },
+    "inter_annotator_agreement": {
+      "n_pairs": 1,
+      "mae_scale_0_10": 0.0
+    },
+    "env": {
+      "python_version": "3.13.14",
+      "evaluated_at": "2026-10-22T19:30:24.508336+00:00"
+    }
+  },
+  "interviews": {
+    "task": "interview_evaluator",
+    "implementation_status": "IMPLEMENTED \u2014 local rule-based: keyword regex + STAR patterns + depth signals",
+    "dataset": {
+      "source": "synthetic",
+      "num_annotations": 30,
+      "num_evaluated": 30,
+      "known_limitation": "All annotations SYNTHETIC. Real-world performance not yet validated."
+    },
+    "metrics": {
+      "mae_system_vs_reviewer_100": 49.71,
+      "rmse_system_vs_reviewer_100": 55.0,
+      "spearman_correlation": 0.7126
+    },
+    "per_question_type": {
+      "behavioral": {
+        "n": 15,
+        "mae": 51.57,
+        "rmse": 56.94
+      },
+      "situational": {
+        "n": 2,
+        "mae": 79.8,
+        "rmse": 79.8
+      },
+      "technical": {
+        "n": 13,
+        "mae": 42.94,
+        "rmse": 47.54
+      }
+    },
+    "inter_annotator_agreement": {
+      "n_pairs": 7,
+      "mae_scale_0_100": 4.49
+    },
+    "error_counts": {
+      "high_system_low_reviewer": 0,
+      "low_system_high_reviewer": 16
+    },
+    "env": {
+      "python_version": "3.13.14",
+      "evaluated_at": "2026-10-22T19:30:24.520158+00:00"
+    }
+  },
+  "job_matching": {
+    "task": "job_matching",
+    "status": "not_implemented",
+    "note": "Job matching evaluation SKIPPED. The current application implements only pairwise TF-IDF role-alignment scoring, not ranked retrieval from a candidate pool. MRR, nDCG@k, and Recall@k cannot be computed until a ranked candidate set is implemented. Schema is available at ml/evaluation/schemas/job_matching_schema.json."
+  }
+}

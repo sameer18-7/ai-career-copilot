@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ATSScoringAnnotation",
+  "description": "Human-reviewed rubric rating for one resume against a target role.",
+  "type": "object",
+  "required": ["example_id", "dataset_version", "status", "source", "resume_text_id", "target_role", "reviewer_id", "rubric"],
+  "properties": {
+    "example_id":      { "type": "string" },
+    "dataset_version": { "type": "string" },
+    "status":          { "type": "string", "enum": ["draft", "reviewed", "adjudicated"] },
+    "source":          { "type": "string", "enum": ["synthetic", "permissioned", "public"] },
+    "resume_text_id":  { "type": "string" },
+    "target_role":     { "type": "string" },
+    "reviewer_id":     { "type": "string", "description": "Non-identifying reviewer code e.g. R1" },
+    "notes":           { "type": "string" },
+    "rubric": {
+      "type": "object",
+      "description": "Each dimension rated 0-10 by the reviewer. -1 means 'not applicable'.",
+      "required": ["required_skill_evidence", "preferred_skill_evidence", "experience_relevance", "section_completeness", "document_clarity"],
+      "properties": {
+        "required_skill_evidence":  { "type": "integer", "minimum": -1, "maximum": 10 },
+        "preferred_skill_evidence": { "type": "integer", "minimum": -1, "maximum": 10 },
+        "experience_relevance":     { "type": "integer", "minimum": -1, "maximum": 10 },
+        "section_completeness":     { "type": "integer", "minimum": -1, "maximum": 10 },
+        "document_clarity":         { "type": "integer", "minimum": -1, "maximum": 10 },
+        "reviewer_overall":         { "type": "integer", "minimum": 0, "maximum": 10,
+                                      "description": "Holistic impression 0-10 (not a weighted sum)" }
+      }
+    },
+    "disclaimer_acknowledged": {
+      "type": "boolean",
+      "description": "Reviewer confirms score is a document quality rating, NOT a hiring prediction"
+    }
+  }
+}

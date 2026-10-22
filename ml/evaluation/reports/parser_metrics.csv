@@ -1,0 +1,9 @@
+field,precision,recall,f1,support_tp_fn
+name,0.64,1.0,0.7805,16
+email,1.0,1.0,1.0,27
+phone,1.0,1.0,1.0,7
+linkedin,1.0,1.0,1.0,6
+github,1.0,1.0,1.0,3
+portfolio,1.0,1.0,1.0,1
+skill_extraction,0.5864,0.9847,0.735,131
+section_detection,1.0,1.0,1.0,95
