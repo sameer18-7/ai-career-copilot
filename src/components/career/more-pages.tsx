@@ -600,11 +600,11 @@ export function InterviewsPage() {
 
                   {/* Evaluation result */}
                   {isEvaluated && currentEval && (
-                    <div className="mt-4 space-y-3 rounded-2xl border bg-muted/30 p-4">
+                    <div className="mt-4 space-y-4 rounded-2xl border bg-muted/30 p-4">
                       {/* Score bar */}
                       <div>
                         <div className="flex items-center justify-between text-xs font-bold">
-                          <span>Score</span>
+                          <span>Coaching score</span>
                           <span className={cn(
                             currentEval.score >= 75 ? "text-success" :
                             currentEval.score >= 50 ? "text-warning" : "text-destructive",
@@ -628,10 +628,40 @@ export function InterviewsPage() {
                         </p>
                       </div>
 
+                      {/* Dimension breakdown */}
+                      {currentEval.dimensions && (
+                        <div>
+                          <p className="text-xs font-bold text-muted-foreground mb-2">Score breakdown</p>
+                          <div className="grid grid-cols-5 gap-1 text-center">
+                            {([
+                              ["Relevance", currentEval.dimensions.relevance],
+                              ["Coverage", currentEval.dimensions.coverage],
+                              ["Reasoning", currentEval.dimensions.reasoning],
+                              ["Evidence", currentEval.dimensions.evidence],
+                              ["Structure", currentEval.dimensions.structure],
+                            ] as [string, number][]).map(([label, val]) => (
+                              <div key={label} className="flex flex-col items-center gap-0.5">
+                                <div className="relative h-10 w-full overflow-hidden rounded bg-muted">
+                                  <div
+                                    className={cn(
+                                      "absolute bottom-0 w-full rounded transition-all",
+                                      val >= 70 ? "bg-success/60" : val >= 45 ? "bg-warning/60" : "bg-destructive/40",
+                                    )}
+                                    style={{ height: `${val}%` }}
+                                  />
+                                </div>
+                                <span className="text-[9px] text-muted-foreground leading-tight">{label}</span>
+                                <span className="text-[9px] font-bold">{val}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Strengths */}
                       {currentEval.strengths.length > 0 && (
                         <div>
-                          <p className="text-xs font-bold text-success">✓ Strengths</p>
+                          <p className="text-xs font-bold text-success">✓ What you did well</p>
                           <ul className="mt-1.5 space-y-1">
                             {currentEval.strengths.map((s) => (
                               <li key={s} className="text-xs text-muted-foreground">• {s}</li>
@@ -643,7 +673,7 @@ export function InterviewsPage() {
                       {/* Improvements */}
                       {currentEval.improvements.length > 0 && (
                         <div>
-                          <p className="text-xs font-bold text-warning">⚠ Improve</p>
+                          <p className="text-xs font-bold text-warning">⚠ Coaching suggestions</p>
                           <ul className="mt-1.5 space-y-1">
                             {currentEval.improvements.map((s) => (
                               <li key={s} className="text-xs text-muted-foreground">• {s}</li>
@@ -651,6 +681,14 @@ export function InterviewsPage() {
                           </ul>
                         </div>
                       )}
+
+                      {/* Disclaimer */}
+                      <p className="rounded-lg border border-muted bg-muted/40 px-3 py-2 text-[10px] text-muted-foreground leading-relaxed">
+                        ℹ {currentEval.disclaimer}
+                        {currentEval.lowConfidenceNote && (
+                          <><br /><span className="italic">{currentEval.lowConfidenceNote}</span></>
+                        )}
+                      </p>
                     </div>
                   )}
                 </div>

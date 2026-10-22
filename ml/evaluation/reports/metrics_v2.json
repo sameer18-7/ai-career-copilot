@@ -1,0 +1,115 @@
+{
+  "interview_evaluator_v2": {
+    "task": "interview_evaluator_v2",
+    "rubric_version": "2.0.0",
+    "phase3_baseline": {
+      "mae": 49.7,
+      "rmse": 55.0,
+      "spearman": 0.7126,
+      "n": 30,
+      "system_low_reviewer_high": 16,
+      "system_high_reviewer_low": 0
+    },
+    "partition_scheme": {
+      "dev_question_ids": [
+        "Q-B-01",
+        "Q-B-02",
+        "Q-B-03",
+        "Q-B-04",
+        "Q-B-05",
+        "Q-T-01",
+        "Q-T-02",
+        "Q-T-03",
+        "Q-T-04",
+        "Q-T-05"
+      ],
+      "held_out_question_ids": [
+        "Q-B-06",
+        "Q-B-07",
+        "Q-B-08",
+        "Q-B-09",
+        "Q-B-10",
+        "Q-T-06",
+        "Q-T-07",
+        "Q-T-08"
+      ],
+      "rationale": "Partitioned by question family; both reviewer records for the same answer are in the same partition to prevent leakage."
+    },
+    "dataset": {
+      "source": "synthetic",
+      "num_annotations": 30,
+      "num_evaluated": 30,
+      "known_limitation": "ALL results are on SYNTHETIC data. Real-world validation requires human-reviewed, permissioned QA pairs."
+    },
+    "overall": {
+      "n": 30,
+      "mae": 46.46,
+      "rmse": 52.25,
+      "signed_mean_error": -46.21,
+      "spearman": 0.7335,
+      "system_high_reviewer_low": 0,
+      "system_low_reviewer_high": 16
+    },
+    "dev_partition": {
+      "n": 18,
+      "mae": 43.26,
+      "rmse": 49.91,
+      "signed_mean_error": -42.84,
+      "spearman": 0.7812,
+      "system_high_reviewer_low": 0,
+      "system_low_reviewer_high": 7
+    },
+    "held_out_partition": {
+      "n": 12,
+      "mae": 51.27,
+      "rmse": 55.58,
+      "signed_mean_error": -51.27,
+      "spearman": 0.5035,
+      "system_high_reviewer_low": 0,
+      "system_low_reviewer_high": 9
+    },
+    "per_question_type": {
+      "behavioral": {
+        "n": 15,
+        "mae": 46.54,
+        "rmse": 51.6,
+        "signed_mean_error": -46.03,
+        "spearman": 0.7071,
+        "system_high_reviewer_low": 0,
+        "system_low_reviewer_high": 10
+      },
+      "situational": {
+        "n": 2,
+        "mae": 83.8,
+        "rmse": 83.8,
+        "signed_mean_error": -83.8,
+        "spearman": null,
+        "system_high_reviewer_low": 0,
+        "system_low_reviewer_high": 2
+      },
+      "technical": {
+        "n": 13,
+        "mae": 40.63,
+        "rmse": 46.35,
+        "signed_mean_error": -40.63,
+        "spearman": 0.6703,
+        "system_high_reviewer_low": 0,
+        "system_low_reviewer_high": 4
+      }
+    },
+    "inter_annotator_agreement": {
+      "n_pairs": 7,
+      "mae_scale_0_100": 4.49
+    },
+    "comparison_with_phase3": {
+      "mae_delta": -3.24,
+      "rmse_delta": -2.75,
+      "spearman_delta": 0.0209,
+      "note": "Delta measured on SAME SYNTHETIC dataset. Improvement on synthetic data does NOT imply real-world improvement."
+    },
+    "env": {
+      "python_version": "3.13.14",
+      "evaluated_at": "2026-10-22T20:21:05.959863+00:00"
+    }
+  }
+}
