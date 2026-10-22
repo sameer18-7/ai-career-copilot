@@ -33,7 +33,6 @@ from .src.document_extractor import extract_text
 from .src.resume_parser import parse_resume, flatten_skills
 from .src.keyword_engine import suggest_keywords
 from .src.ats_scorer import compute_ats_score, generate_quick_fixes
-from .src.feature_engineering import compute_role_alignment
 
 # ---------------------------------------------------------------------------
 # Logging — never log resume text or PII
@@ -87,7 +86,7 @@ MAX_ROLE_LENGTH: int = 200
 app = FastAPI(
     title="AI Career Copilot — ML Service",
     description="Local ML-powered resume parser and analyzer",
-    version="1.0.0",
+    version="2.0.0",
     # Disable docs in production via env (optional)
     docs_url=None if os.environ.get("ML_DISABLE_DOCS") else "/docs",
     redoc_url=None if os.environ.get("ML_DISABLE_DOCS") else "/redoc",
@@ -215,6 +214,7 @@ async def health():
         "modelLoaded": models_loaded,
         "categories": _metadata.get("categories", []) if _metadata else [],
         "testAccuracy": _metadata.get("test_accuracy", 0) if _metadata else 0,
+        "version": "2.0.0",
     }
 
 
@@ -259,22 +259,26 @@ async def parse_resume_endpoint(file: UploadFile = File(...)):
 async def analyze_resume_endpoint(
     file: UploadFile = File(...),
     target_role: str = Form("Software Engineer"),
+    job_description: str = Form(""),
 ):
     """
     Full resume analysis pipeline:
       1. Extract text from document
       2. Parse into structured data
-      3. Compute ATS score with sub-scores
+      3. Compute ATS score with sub-scores (role_alignment computed ONCE)
       4. Generate suggested keywords
       5. Generate quick fixes
-      6. Predict resume category
+      6. Predict resume category (separate task — TF-IDF + LinearSVC classifier)
+
+    Note: The ATS score is a resume-to-role match estimate, not an official
+    employer ATS score or a validated prediction of hiring success.
     """
     try:
         file_bytes = await file.read()
         _validate_upload(file, file_bytes)
         target_role = _validate_role(target_role)
 
-        # Step 1: Extract text (extractor enforces format via extension + magic bytes)
+        # Step 1: Extract text
         raw_text = extract_text(file_bytes, file.filename or "upload")
 
         # Enforce text length limit
@@ -284,16 +288,17 @@ async def analyze_resume_endpoint(
         # Step 2: Parse resume
         parsed = parse_resume(raw_text)
 
-        # Step 3: ATS score
-        ats_result = compute_ats_score(parsed, raw_text, target_role)
+        # Step 3: ATS score (role_alignment is computed inside and returned)
+        jd = job_description.strip() if job_description else None
+        ats_result = compute_ats_score(parsed, raw_text, target_role, job_description=jd)
 
         # Step 4: Suggested keywords
         keywords = suggest_keywords(parsed, target_role, raw_text, max_keywords=8)
 
-        # Step 5: Quick fixes
-        fixes = generate_quick_fixes(parsed, raw_text, target_role, max_fixes=6)
+        # Step 5: Quick fixes (pass pre-computed ats_result to avoid duplication)
+        fixes = generate_quick_fixes(parsed, raw_text, target_role, ats_result=ats_result, max_fixes=6)
 
-        # Step 6: Category prediction (if model loaded)
+        # Step 6: Category prediction (separate ML classifier — NOT the ATS scorer)
         predicted_category = None
         _load_models()
         if _tfidf is not None and _classifier is not None:
@@ -303,8 +308,12 @@ async def analyze_resume_endpoint(
             except Exception:
                 logger.warning("Category prediction failed", exc_info=True)
 
-        # Step 7: Role alignment score
-        role_alignment = compute_role_alignment(raw_text, target_role, _tfidf)
+        # Build response
+        candidate = parsed.get("candidate", {})
+        education = parsed.get("education", [])
+        experience = parsed.get("experience", [])
+        projects = parsed.get("projects", [])
+        certifications = parsed.get("certifications", [])
 
         # Build skills flat list
         skills_dict = parsed.get("skills", {})
@@ -312,13 +321,6 @@ async def analyze_resume_endpoint(
             flat_skills = flatten_skills(skills_dict)
         else:
             flat_skills = skills_dict if isinstance(skills_dict, list) else []
-
-        # Build response matching frontend ResumeAnalysisData shape
-        candidate = parsed.get("candidate", {})
-        education = parsed.get("education", [])
-        experience = parsed.get("experience", [])
-        projects = parsed.get("projects", [])
-        certifications = parsed.get("certifications", [])
 
         return {
             "success": True,
@@ -329,10 +331,19 @@ async def analyze_resume_endpoint(
                 "location": candidate.get("location", ""),
                 "linkedin": candidate.get("linkedin", ""),
                 "github": candidate.get("github", ""),
+                "portfolio": candidate.get("portfolio", ""),
             },
             "targetRole": target_role,
+            # ATS scoring result — all from a single computation (B4 fix)
             "atsScore": ats_result["atsScore"],
+            "scoreType": ats_result["scoreType"],
+            "roleAlignment": ats_result["roleAlignment"],  # now mapped (B6 fix)
             "atsSubScores": ats_result["atsSubScores"],
+            "matchedSkills": ats_result["matchedSkills"],
+            "missingRequiredSkills": ats_result["missingRequiredSkills"],
+            "missingPreferredSkills": ats_result["missingPreferredSkills"],
+            "evidence": ats_result["evidence"],
+            # Parsed data
             "skills": flat_skills,
             "education": [
                 {
@@ -369,8 +380,8 @@ async def analyze_resume_endpoint(
             ],
             "suggestedKeywords": keywords,
             "quickFixes": fixes,
+            # Category prediction — separate model, separate task
             "predictedCategory": predicted_category,
-            "roleAlignment": round(role_alignment * 100, 1),
         }
 
     except HTTPException:

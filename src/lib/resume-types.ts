@@ -49,6 +49,7 @@ export interface CandidateInfo {
   location: string;
   linkedin: string;
   github: string;
+  portfolio?: string;
 }
 
 export interface ResumeExperience {
@@ -76,29 +77,70 @@ export interface ResumeCertification {
   year: string;
 }
 
+/**
+ * Evidence item returned for a matched skill.
+ * source indicates where the skill was found in the resume.
+ */
+export interface SkillEvidence {
+  skill: string;
+  /** Where the skill was matched: "skills_section" | "experience" | "project" | "text_mention" */
+  source: "skills_section" | "experience" | "project" | "text_mention";
+  evidence: string;
+}
+
+/**
+ * Per-component score breakdown with evidence and explanation.
+ * Each sub-score carries its weight, raw 0-100 score, weighted contribution,
+ * human-readable explanation, and matched/missing skill lists.
+ */
 export interface ATSSubScore {
   label: string;
-  value: number; // 0-100
+  value: number;            // 0-100 raw score for display (legacy compat)
+  weight: number;           // 0-1 component weight
+  rawScore: number;         // 0-100 raw component score
+  weightedScore: number;    // rawScore * weight (0-100)
+  explanation: string;      // human-readable explanation
+  matched: string[];        // skills/sections matched in this component
+  missing: string[];        // skills/sections missing in this component
 }
 
 /**
  * The complete analysis payload produced by the parser + ML model.
  *
- * - suggestedKeywords  — keywords the ML model recommends adding for the target role
- * - quickFixes        — plain-text improvement recommendations (text-only, no checkboxes)
+ * - suggestedKeywords  — keywords recommended based on the target role
+ * - quickFixes        — plain-text improvement recommendations (text-only)
+ * - scoreType         — "role_based" (no JD) | "jd_based" (JD provided)
+ * - roleAlignment     — 0-100 TF-IDF similarity to role skill profile
+ * - matchedSkills     — required skills confirmed in resume
+ * - missingRequiredSkills — required skills not evidenced
+ * - missingPreferredSkills — preferred skills not evidenced
+ * - evidence          — structured evidence items for matched skills
+ *
+ * Note: atsScore is a resume-to-role MATCH ESTIMATE, not an official ATS score
+ * or a validated predictor of hiring success.
  */
 export interface ResumeAnalysisData {
   candidate: CandidateInfo;
-  targetRole: string;           // the role the user selected before analysis
-  atsScore: number;             // 0-100, from ML model
-  atsSubScores: ATSSubScore[];  // breakdown bars
-  skills: string[];
+  targetRole: string;              // the role the user selected before analysis
+  atsScore: number;                // 0-100 weighted composite score
+  /** "role_based" when scored against role profile; "jd_based" when a JD was provided. */
+  scoreType?: "role_based" | "jd_based";
+  /** 0-100 TF-IDF text similarity to role skill profile. Consistent with atsSubScores. */
+  roleAlignment?: number;
+  atsSubScores: ATSSubScore[];     // breakdown bars with evidence
+  skills: string[];                // flat skill list from resume
+  matchedSkills?: string[];        // required skills confirmed present
+  missingRequiredSkills?: string[]; // required skills not evidenced
+  missingPreferredSkills?: string[]; // preferred skills not evidenced
+  evidence?: SkillEvidence[];      // structured evidence for matched skills
   experience: ResumeExperience[];
   education: ResumeEducation[];
   projects: ResumeProject[];
   certifications: ResumeCertification[];
-  suggestedKeywords: string[];  // renamed from missingKeywords — ML model output
-  quickFixes: string[];         // text-only strings — ML model output (no id/completed)
+  suggestedKeywords: string[];     // renamed from missingKeywords
+  quickFixes: string[];            // text-only strings (no id/completed)
+  /** Resume category predicted by TF-IDF + LinearSVC (separate from ATS scoring). */
+  predictedCategory?: string | null;
 }
 
 // ---------------------------------------------------------------------------
