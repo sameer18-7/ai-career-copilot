@@ -15,6 +15,19 @@ export const users = pgTable("user", {
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  /**
+   * Argon2id hash of the user's password, set during credential sign-up.
+   * NULL for OAuth-only accounts that have no local password.
+   * NEVER populate this column with a plaintext password.
+   */
+  passwordHash: text("passwordHash"),
+  /**
+   * Role for authorisation checks. Values: "user" | "admin".
+   * Defaults to "user". NEVER accept this from client payloads;
+   * only set it through server-side provisioning.
+   */
+  role: text("role").default("user"),
+  // Additional optional profile fields — treat as PII; never log.
   dob: text("dob"),
   address: text("address"),
   pii: text("pii"),

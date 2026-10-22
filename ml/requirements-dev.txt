@@ -1,0 +1,18 @@
+# AI Career Copilot — ML Service Dev/Test Dependencies
+# ======================================================
+# Install with: pip install -r requirements-dev.txt
+# (Requires requirements.txt to already be installed)
+
+-r requirements.txt
+
+# Testing
+pytest==8.1.1
+pytest-asyncio==0.23.6
+httpx==0.27.0         # ASGI test client for FastAPI
+
+# Type checking
+mypy==1.9.0
+types-requests==2.31.0.20240311
+
+# Code quality
+ruff==0.3.4

@@ -25,7 +25,7 @@ export interface MLAnalysisInput {
  * Send the resume file + target role to the local FastAPI ML model and return analysis results.
  */
 export async function callMLService(input: MLAnalysisInput): Promise<ResumeAnalysisData> {
-  const ML_SERVICE_URL = import.meta.env.VITE_ML_SERVICE_URL || "http://localhost:8000/analyze-resume";
+  const ML_SERVICE_URL = import.meta.env["VITE_ML_SERVICE_URL"] ?? "http://localhost:8000/analyze-resume";
 
   if (!input.file) {
     throw new Error("No file provided for analysis.");

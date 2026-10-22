@@ -1,29 +1,80 @@
-import { Auth } from "@auth/core";
+/**
+ * Auth.js Configuration
+ * =====================
+ * Configures server-side authentication using Auth.js.
+ *
+ * Security properties:
+ *  - No hardcoded administrator credentials.
+ *  - Credentials provider validates passwords against Argon2id hashes.
+ *  - Role is read from the database; it cannot be supplied by the client.
+ *  - Sign-up requires email + password; the created account gets role = "user".
+ *  - Errors are generic — no internal detail is forwarded to the client.
+ *
+ * Administrator provisioning:
+ *  - Promote a user to admin by running:
+ *      npx tsx scripts/set-admin-role.ts <email>
+ *  - See README.md for the full procedure.
+ */
+
+import { assertEnvValid } from "./env-validation";
 import type { AuthConfig } from "@auth/core";
 import GitHub from "@auth/core/providers/github";
 import Google from "@auth/core/providers/google";
 import Credentials from "@auth/core/providers/credentials";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "../db/index";
+import { users } from "../db/schema";
+import { eq } from "drizzle-orm";
+import { hash, verify as argon2Verify } from "@node-rs/argon2";
 
-const providers: any[] = [
-  GitHub({
-    clientId: process.env.GITHUB_ID || process.env.AUTH_GITHUB_ID,
-    clientSecret: process.env.GITHUB_SECRET || process.env.AUTH_GITHUB_SECRET,
-  }),
-];
+// Validate environment at module load time (happens once at startup).
+assertEnvValid();
 
-if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
+// ---------------------------------------------------------------------------
+// Argon2id helpers — tuned per OWASP recommendations.
+// ---------------------------------------------------------------------------
+
+const ARGON2_OPTIONS = {
+  memoryCost: 65536, // 64 MiB
+  timeCost: 3,
+  parallelism: 4,
+};
+
+export async function hashPassword(plaintext: string): Promise<string> {
+  return hash(plaintext, ARGON2_OPTIONS);
+}
+
+export async function verifyPassword(
+  storedHash: string,
+  plaintext: string,
+): Promise<boolean> {
+  try {
+    return await argon2Verify(storedHash, plaintext);
+  } catch {
+    return false;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Provider list — built from environment, never hardcoded.
+// ---------------------------------------------------------------------------
+
+const providers: AuthConfig["providers"] = [];
+
+const githubId = process.env["AUTH_GITHUB_ID"] ?? process.env["GITHUB_ID"];
+const githubSecret = process.env["AUTH_GITHUB_SECRET"] ?? process.env["GITHUB_SECRET"];
+if (githubId && githubSecret) {
+  providers.push(GitHub({ clientId: githubId, clientSecret: githubSecret }));
+}
+
+if (process.env["AUTH_GOOGLE_ID"] && process.env["AUTH_GOOGLE_SECRET"]) {
   providers.push(
     Google({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
+      clientId: process.env["AUTH_GOOGLE_ID"] ?? "",
+      clientSecret: process.env["AUTH_GOOGLE_SECRET"] ?? "",
     }),
   );
 }
-
-import { users } from "../db/schema";
-import { eq } from "drizzle-orm";
 
 providers.push(
   Credentials({
@@ -37,75 +88,86 @@ providers.push(
       pii: { label: "PII", type: "text" },
     },
     async authorize(credentials) {
-      if (!credentials?.email || !credentials?.password) {
-        return null;
-      }
+      if (!credentials?.email || !credentials?.password) return null;
 
-      const email = String(credentials.email).toLowerCase().trim();
-      const password = String(credentials.password);
+      const email = String(credentials["email"]).toLowerCase().trim();
+      const password = String(credentials["password"]);
 
-      // Admin account for direct testing & administration
-      if (
-        (email === "admin@careercopilot.com" || email === "admin@example.com") &&
-        password === "admin123"
-      ) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
+      if (password.length < 6 || password.length > 128) return null;
+
+      const [existingUser] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1);
+
+      if (existingUser) {
+        if (!existingUser.passwordHash) return null;
+        const valid = await verifyPassword(existingUser.passwordHash, password);
+        if (!valid) return null;
+
         return {
-          id: "admin-user",
-          name: "Admin User",
-          email: "admin@careercopilot.com",
-          role: "admin",
-          image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+          id: existingUser.id,
+          name: existingUser.name,
+          email: existingUser.email,
+          image: existingUser.image,
+          role: existingUser.role ?? "user",
         };
       }
 
-      // If we are passing additional profile data (like on signup), store it in the DB
-      const name = credentials.name ? String(credentials.name) : undefined;
-      const dob = credentials.dob ? String(credentials.dob) : undefined;
-      const address = credentials.address ? String(credentials.address) : undefined;
-      const pii = credentials.pii ? String(credentials.pii) : undefined;
+      // Sign-up path: only when profile fields are provided.
+      const nameField = credentials["name"] ? String(credentials["name"]).slice(0, 200) : undefined;
+      if (!nameField) return null;
 
-      // Check if user exists in the DB
-      const existingUsers = await db.select().from(users).where(eq(users.email, email));
-      let user = existingUsers[0];
+      if (password.length < 8) {
+        throw new Error("Password must be at least 8 characters.");
+      }
 
-      if (!user) {
-        // Create user
-        const newUsers = await db.insert(users).values({
-          name: name || "Demo Candidate",
-          email: email,
+      const dob = credentials["dob"] ? String(credentials["dob"]).slice(0, 20) : undefined;
+      const address = credentials["address"] ? String(credentials["address"]).slice(0, 500) : undefined;
+      const pii = credentials["pii"] ? String(credentials["pii"]).slice(0, 1000) : undefined;
+
+      const passwordHash = await hashPassword(password);
+
+      const insertedRows = await db
+        .insert(users)
+        .values({
+          name: nameField,
+          email,
+          passwordHash,
           dob,
           address,
           pii,
-          image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-        }).returning();
-        user = newUsers[0];
-      } else if (name || dob || address || pii) {
-        // Update user if new details are provided
-        const updatedUsers = await db.update(users).set({
-          ...(name ? { name } : {}),
-          ...(dob ? { dob } : {}),
-          ...(address ? { address } : {}),
-          ...(pii ? { pii } : {}),
-        }).where(eq(users.id, user.id)).returning();
-        user = updatedUsers[0];
-      }
+          image: null,
+        })
+        .returning();
+
+      const newUser = insertedRows[0];
+      if (!newUser) return null;
 
       return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        image: newUser.image,
         role: "user",
-        image: user.image,
       };
     },
   }),
 );
+
+// ---------------------------------------------------------------------------
+// Exported auth configuration
+// ---------------------------------------------------------------------------
 
 export const authConfig: AuthConfig = {
   basePath: "/api/auth",
   adapter: DrizzleAdapter(db),
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60 * 24 * 30,
+    updateAge: 60 * 60 * 24,
   },
   providers,
   pages: {
@@ -115,21 +177,22 @@ export const authConfig: AuthConfig = {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = (user as any).role || "user";
+        token["id"] = user.id;
+        token["role"] = (user as { role?: string }).role ?? "user";
       }
       return token;
     },
     session({ session, token }) {
       if (session.user && token) {
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role;
+        (session.user as { id?: string })["id"] = token["id"] as string;
+        (session.user as { role?: string })["role"] = (token["role"] as string) ?? "user";
       }
       return session;
     },
   },
-  secret: process.env.AUTH_SECRET,
+  // AUTH_SECRET is validated by assertEnvValid() above; cast is safe in prod.
+  secret: process.env["AUTH_SECRET"] ?? "",
   trustHost: true,
 };
 
-export { Auth };
+export { Auth } from "@auth/core";

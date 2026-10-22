@@ -10,11 +10,15 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// Extend Window to include vendor-prefixed SpeechRecognition
+// Extend Window to include SpeechRecognition (not in all TS lib versions)
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const SpeechRecognition: any;
   interface Window {
-    SpeechRecognition?: typeof SpeechRecognition;
-    webkitSpeechRecognition?: typeof SpeechRecognition;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    SpeechRecognition?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    webkitSpeechRecognition?: any;
   }
 }
 
@@ -36,7 +40,8 @@ export interface UseVoiceInputReturn {
 export function useVoiceInput({ onResult, lang = "en-US" }: UseVoiceInputOptions): UseVoiceInputReturn {
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState("");
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
 
   const SpeechRecognitionImpl =
     typeof window !== "undefined"
@@ -61,7 +66,8 @@ export function useVoiceInput({ onResult, lang = "en-US" }: UseVoiceInputOptions
     rec.continuous = true;
     rec.interimResults = true;
 
-    rec.onresult = (event) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (event: any) => {
       let interim = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
@@ -80,7 +86,8 @@ export function useVoiceInput({ onResult, lang = "en-US" }: UseVoiceInputOptions
       recognitionRef.current = null;
     };
 
-    rec.onerror = (e) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onerror = (e: any) => {
       console.warn("[VoiceInput] SpeechRecognition error:", e.error);
       stop();
     };

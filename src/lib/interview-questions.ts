@@ -309,15 +309,17 @@ export function generateInterviewQuestions(
   // 3. Role technical
   if (category !== "Behavioral") {
     const roleQs = ROLE_QUESTION_BANK[roleKey] ?? ROLE_QUESTION_BANK["default"];
-    roleQs.slice(0, 3).forEach((q, i) => {
-      questions.push({
-        id: `role-${i}`,
-        text: `${ctx} ${q.text}`,
-        type: "technical",
-        hint: "Be specific and use real examples if possible",
-        keywords: q.keywords,
+    if (roleQs) {
+      roleQs.slice(0, 3).forEach((q, i) => {
+        questions.push({
+          id: `role-${i}`,
+          text: `${ctx} ${q.text}`,
+          type: "technical",
+          hint: "Be specific and use real examples if possible",
+          keywords: q.keywords,
+        });
       });
-    });
+    }
 
     // Track CS questions
     const trackQs = TRACK_CS_QUESTIONS[track] ?? [];

@@ -30,3 +30,54 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ── Security: environment files ─────────────────────────────────────────────
+# Never commit secrets, tokens, or credentials.
+# Copy .env.example → .env and fill in real values locally.
+.env
+.env.*
+!.env.example
+
+# Private key files
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ecdsa
+id_ed25519
+*.private
+
+# Local SQLite / other local databases
+*.sqlite
+*.sqlite3
+*.db
+
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.egg
+.Python
+.venv/
+venv/
+env/
+ENV/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ML training data (may contain PII in real datasets)
+# Trained model artifacts can be committed if the training data is safe.
+# Uncomment the line below to exclude them:
+# ml/models/*.joblib
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp

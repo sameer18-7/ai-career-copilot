@@ -1,10 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { InterviewsPage } from "@/components/career/more-pages";
 
 const title = "Interview Coach — AI Career Copilot";
-const description = "Run role-specific mock interviews and get instant AI feedback on clarity, structure and depth.";
+const description =
+  "Run role-specific mock interviews and get instant AI feedback on clarity, structure and depth.";
 
 export const Route = createFileRoute("/interviews")({
+  beforeLoad: ({ context }) => {
+    if (!context.session?.user) {
+      throw redirect({ to: "/login", search: { callbackUrl: "/interviews" } });
+    }
+  },
   head: () => ({
     meta: [
       { title },

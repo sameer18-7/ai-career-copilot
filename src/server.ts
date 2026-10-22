@@ -1,5 +1,11 @@
 import "./lib/error-capture";
 
+// Validate required environment variables at startup.
+// In production this throws and prevents the server from starting with missing secrets.
+// In development it logs a clear error but continues to allow hot-reload fixes.
+import { assertEnvValid } from "./lib/env-validation";
+assertEnvValid();
+
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { createStartHandler, defaultStreamHandler } from "@tanstack/react-start/server";
@@ -42,9 +48,12 @@ export default {
         return await Auth(request, authConfig);
       }
 
-      const response = await startHandler(request, env);
+      // env is the Cloudflare Workers / Vite runtime environment object.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = await startHandler(request, env as any);
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
+      // Never expose internal error details in the HTTP response body.
       console.error(error);
       return new Response(renderErrorPage(), {
         status: 500,

@@ -7,7 +7,10 @@ export const getRouter = () => {
 
   const router = createRouter({
     routeTree,
-    context: { queryClient },
+    // session is populated dynamically by __root.tsx's beforeLoad.
+    // It must be present in the initial context to satisfy the type contract
+    // even though it starts as null (before the first getSession() call).
+    context: { queryClient, session: null },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
   });

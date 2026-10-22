@@ -964,42 +964,6 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
                 </div>
               )}
 
-              {/* Quick Admin Test Credentials Banner */}
-              <div className="mt-5 rounded-xl border border-primary/25 bg-primary/5 p-3.5 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-foreground">Test Accounts:</span>
-                  <div className="flex gap-1.5">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="h-6 bg-background px-2 text-[11px] font-semibold text-primary shadow-xs hover:bg-primary/10"
-                      onClick={() => {
-                        setEmail("admin@careercopilot.com");
-                        setPassword("admin123");
-                      }}
-                    >
-                      Fill Admin
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 px-2 text-[11px] text-muted-foreground hover:bg-muted"
-                      onClick={() => {
-                        setEmail("test@example.com");
-                        setPassword("password");
-                      }}
-                    >
-                      Fill Demo
-                    </Button>
-                  </div>
-                </div>
-                <div className="mt-2 space-y-0.5 font-mono text-[11px] text-muted-foreground">
-                  <div>Admin: <span className="font-semibold text-foreground">admin@careercopilot.com</span> / <span className="font-semibold text-foreground">admin123</span></div>
-                  <div>Demo: <span className="text-foreground">test@example.com</span> / <span className="text-foreground">password</span></div>
-                </div>
-              </div>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <Button
@@ -1045,7 +1009,7 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="mt-2 h-11"
-                    placeholder="admin@careercopilot.com"
+                    placeholder="you@example.com"
                   />
                 </div>
                 <div>
