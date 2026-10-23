@@ -36,7 +36,7 @@ export const getRouter = () => {
   function ensureServerSsrHelpers(val: any) {
     if (val && typeof val === "object") {
       if (typeof val.takeBufferedScripts !== "function") val.takeBufferedScripts = () => undefined;
-      if (typeof val.reserveStreamFastPath !== "function") val.reserveStreamFastPath = () => false;
+      if (typeof val.reserveStreamFastPath !== "function") val.reserveStreamFastPath = () => true;
       if (typeof val.setRenderFinished !== "function") val.setRenderFinished = () => {};
       if (typeof val.onRenderFinished !== "function") val.onRenderFinished = () => {};
       if (typeof val.onInjectedHtml !== "function") val.onInjectedHtml = () => () => {};
