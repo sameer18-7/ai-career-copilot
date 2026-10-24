@@ -10,9 +10,11 @@ import {
   Play,
   Rocket,
   Search,
+  ShieldCheck,
   Sparkles,
   Star,
   Timer,
+  UserCheck,
   X,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -935,11 +937,12 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
 
   function handleAuthSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (step === 1) {
-      setStep(2); // Proceed to details step
+    if (isSignup && step === 1) {
+      setStep(2); // Proceed to details step only on signup
     } else {
-      // Trigger NextAuth flow with the profile payload
-      signInWithCredentials(email, password, "/dashboard", { name, dob, address, pii });
+      // Trigger NextAuth flow with the profile payload for signup, or just credentials for login
+      const profile = isSignup ? { name, dob, address, pii } : undefined;
+      signInWithCredentials(email, password, "/dashboard", profile);
     }
   }
 
@@ -1037,6 +1040,41 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
           <form className={cn("space-y-4", step === 2 && "mt-6")} onSubmit={handleAuthSubmit}>
             {step === 1 && (
               <>
+                <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-3.5">
+                  <div className="flex items-center justify-between text-xs font-semibold text-primary mb-2">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles className="size-3.5" /> Quick Fill Demo Credentials
+                    </span>
+                    <span className="text-[10px] text-muted-foreground font-normal">Click to auto-populate</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs font-semibold bg-background hover:bg-primary/10 hover:text-primary border-primary/20"
+                      onClick={() => {
+                        setEmail("admin@careercopilot.com");
+                        setPassword("adminpassword123");
+                      }}
+                    >
+                      <ShieldCheck className="mr-1.5 size-3.5 text-primary" /> Admin Account
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs font-semibold bg-background hover:bg-primary/10 hover:text-primary border-primary/20"
+                      onClick={() => {
+                        setEmail("test@careercopilot.com");
+                        setPassword("testpassword123");
+                      }}
+                    >
+                      <UserCheck className="mr-1.5 size-3.5 text-primary" /> Test Student
+                    </Button>
+                  </div>
+                </div>
+
                 <div>
                   <Label htmlFor="email" className="text-xs font-bold">Email</Label>
                   <Input
@@ -1141,7 +1179,7 @@ export function AuthPage({ mode }: { mode: "login" | "signup" }) {
             )}
 
             <Button className="h-11 w-full" type="submit">
-              {step === 1 ? "Continue" : (isSignup ? "Create free account" : "Log In")}
+              {isSignup ? (step === 1 ? "Continue" : "Create free account") : "Log In"}
             </Button>
           </form>
 
